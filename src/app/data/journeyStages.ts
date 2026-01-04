@@ -11,13 +11,13 @@ export interface JourneyStage {
   terrain?: string;
 }
 
-export const journeyStages: JourneyStage[] = [
+export const journeyStages = [
   {
     id: 1,
-    name: "Gibraltar",
+    name: "Gibraltar - Malaga",
     country: "Gibraltar",
-    distance: 0,
-    elevation: 5,
+    distance: 468,
+    elevation: 1563,
     date: "1er Avril 2025",
     description: "Départ de notre aventure depuis le rocher de Gibraltar, à la pointe sud de l'Europe.",
     highlights: [
@@ -25,12 +25,11 @@ export const journeyStages: JourneyStage[] = [
       "Dernière vue sur l'Afrique",
       "Début de l'aventure européenne"
     ],
-    temperature: "18°C",
-    terrain: "Côtier"
+    terrain: "Route"
   },
   {
     id: 2,
-    name: "Séville",
+    name: "Malaga - Séville",
     country: "Espagne",
     distance: 280,
     elevation: 12,
@@ -41,12 +40,11 @@ export const journeyStages: JourneyStage[] = [
       "Quartier de Triana",
       "Tapas et flamenco"
     ],
-    temperature: "22°C",
-    terrain: "Plat"
+    terrain: "Route"
   },
   {
     id: 3,
-    name: "Madrid",
+    name: "Séville - Madrid",
     country: "Espagne",
     distance: 780,
     elevation: 667,
@@ -57,12 +55,11 @@ export const journeyStages: JourneyStage[] = [
       "Plaza Mayor",
       "Gastronomie madrilène"
     ],
-    temperature: "16°C",
-    terrain: "Plateau"
+    terrain: "Gravel"
   },
   {
     id: 4,
-    name: "Pyrénées",
+    name: "Madrid - Pyrénées",
     country: "France",
     distance: 1350,
     elevation: 1850,
@@ -73,12 +70,11 @@ export const journeyStages: JourneyStage[] = [
       "Paysages montagneux",
       "Première neige"
     ],
-    temperature: "8°C",
-    terrain: "Montagne"
+    terrain: "Gravel"
   },
   {
     id: 5,
-    name: "Bordeaux",
+    name: "Pyrénées - Bordeaux",
     country: "France",
     distance: 1680,
     elevation: 8,
@@ -89,12 +85,11 @@ export const journeyStages: JourneyStage[] = [
       "Dégustation de vins",
       "Architecture classique"
     ],
-    temperature: "19°C",
-    terrain: "Plat"
+    terrain: "Route"
   },
   {
     id: 6,
-    name: "Paris",
+    name: "Bordeaux - Paris",
     country: "France",
     distance: 2250,
     elevation: 35,
@@ -105,12 +100,11 @@ export const journeyStages: JourneyStage[] = [
       "Châteaux de la Loire",
       "Seine à vélo"
     ],
-    temperature: "20°C",
-    terrain: "Vallonné"
+    terrain: "Gravel"
   },
   {
     id: 7,
-    name: "Bruxelles",
+    name: "Paris - Bruxelles",
     country: "Belgique",
     distance: 2570,
     elevation: 58,
@@ -121,12 +115,11 @@ export const journeyStages: JourneyStage[] = [
       "Atomium",
       "Bières et chocolats"
     ],
-    temperature: "17°C",
-    terrain: "Plat"
+    terrain: "Route"
   },
   {
     id: 8,
-    name: "Amsterdam",
+    name: "Bruxelles - Amsterdam",
     country: "Pays-Bas",
     distance: 2750,
     elevation: -2,
@@ -137,12 +130,11 @@ export const journeyStages: JourneyStage[] = [
       "Musée Van Gogh",
       "Tulipes et moulins"
     ],
-    temperature: "18°C",
-    terrain: "Plat"
+    terrain: "Route"
   },
   {
     id: 9,
-    name: "Hambourg",
+    name: "Amsterdam - Hambourg",
     country: "Allemagne",
     distance: 3180,
     elevation: 6,
@@ -153,12 +145,11 @@ export const journeyStages: JourneyStage[] = [
       "Speicherstadt",
       "Architecture hanséatique"
     ],
-    temperature: "16°C",
-    terrain: "Plat"
+    terrain: "Gravel"
   },
   {
     id: 10,
-    name: "Copenhague",
+    name: "Hambourg - Copenhague",
     country: "Danemark",
     distance: 3540,
     elevation: 10,
@@ -169,12 +160,11 @@ export const journeyStages: JourneyStage[] = [
       "Infrastructure cyclable parfaite",
       "Design scandinave"
     ],
-    temperature: "19°C",
-    terrain: "Plat"
+    terrain: "Route"
   },
   {
     id: 11,
-    name: "Göteborg",
+    name: "Copenhague - Göteborg",
     country: "Suède",
     distance: 3870,
     elevation: 12,
@@ -185,12 +175,11 @@ export const journeyStages: JourneyStage[] = [
       "Fruits de mer",
       "Première nuit blanche"
     ],
-    temperature: "17°C",
-    terrain: "Côtier"
+    terrain: "Gravel"
   },
   {
     id: 12,
-    name: "Oslo",
+    name: "Göteborg - Oslo",
     country: "Norvège",
     distance: 4320,
     elevation: 23,
@@ -201,12 +190,11 @@ export const journeyStages: JourneyStage[] = [
       "Opéra moderne",
       "Début des fjords"
     ],
-    temperature: "20°C",
-    terrain: "Vallonné"
+    terrain: "Route"
   },
   {
     id: 13,
-    name: "Trondheim",
+    name: "Oslo - Trondheim",
     country: "Norvège",
     distance: 4980,
     elevation: 8,
@@ -217,12 +205,11 @@ export const journeyStages: JourneyStage[] = [
       "Maisons colorées",
       "Cercle polaire proche"
     ],
-    temperature: "16°C",
-    terrain: "Côtier"
+    terrain: "Gravel"
   },
   {
     id: 14,
-    name: "Cercle Polaire",
+    name: "Trondheim - Cercle Polaire",
     country: "Norvège",
     distance: 5480,
     elevation: 120,
@@ -233,12 +220,11 @@ export const journeyStages: JourneyStage[] = [
       "Soleil de minuit",
       "Paysages arctiques"
     ],
-    temperature: "12°C",
-    terrain: "Montagneux"
+    terrain: "Gravel"
   },
   {
     id: 15,
-    name: "Tromsø",
+    name: "Cercle Polaire - Tromsø",
     country: "Norvège",
     distance: 5980,
     elevation: 15,
@@ -249,12 +235,11 @@ export const journeyStages: JourneyStage[] = [
       "Cathédrale arctique",
       "Nature sauvage"
     ],
-    temperature: "11°C",
-    terrain: "Fjords"
+    terrain: "Route"
   },
   {
     id: 16,
-    name: "Nordkapp",
+    name: "Tromsø - Nordkapp",
     country: "Norvège",
     distance: 6780,
     elevation: 307,
@@ -265,7 +250,7 @@ export const journeyStages: JourneyStage[] = [
       "Monument du globe",
       "Fin de l'aventure européenne"
     ],
-    temperature: "8°C",
-    terrain: "Montagne côtière"
+    terrain: "Gravel"
   }
 ];
+

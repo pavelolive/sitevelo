@@ -1,11 +1,28 @@
 
   # Landing Page Voyage à Vélo
 
-  This is a code bundle for Landing Page Voyage à Vélo. The original project is available at https://www.figma.com/design/zv2ozLqITdGaouz1s6eLka/Landing-Page-Voyage-%C3%A0-V%C3%A9lo.
+  Repo du site pour le voyage a velo : https://velo.qtrd.fr/
 
   ## Running the code
 
   Run `npm i` to install the dependencies.
 
   Run `npm run dev` to start the development server.
+  
+ ## Deploying on server
+
+  Depuis le repo en local
+
+  `npm install` 
+
+  `npm run build` 
+
+  `rsync -av --delete dist/ youruser@ssh.qtrd.fr:/var/www/velo.qtrd.fr/` 
+
+  
+## Lancer le Backend
+
+  `cd /opt/velo-strava-api` 
+
+  `node server.mjs` 
   
