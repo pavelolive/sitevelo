@@ -21,6 +21,8 @@ type LatestActivityResponse = {
 export function RideWidget() {
   const [selectedStage, setSelectedStage] = useState(journeyStages[0])
   const scrollContainerRef = useRef<HTMLDivElement>(null)
+  const cardRefs = useRef<Record<number, HTMLButtonElement | null>>({})
+
 
   const [latest, setLatest] = useState<LatestActivityResponse | null>(null)
   const [loading, setLoading] = useState(true)
@@ -44,13 +46,70 @@ export function RideWidget() {
     el.scrollBy({ left: dir === "left" ? -amount : amount, behavior: "smooth" })
   }
 
+  const centerStageCard = (stageId: number, behavior: ScrollBehavior = "smooth") => {
+    const container = scrollContainerRef.current
+    const card = cardRefs.current[stageId]
+    if (!container || !card) return
+
+    const containerRect = container.getBoundingClientRect()
+    const cardRect = card.getBoundingClientRect()
+
+    // card center relative to container scroll
+    const cardCenter = (cardRect.left - containerRect.left) + cardRect.width / 2
+    const targetScrollLeft = container.scrollLeft + cardCenter - container.clientWidth / 2
+
+    container.scrollTo({ left: targetScrollLeft, behavior })
+  }
+
+  const parseFRDate = (s: string) => {
+    // "23/06/2026"
+    const [dd, mm, yyyy] = s.split("/").map(Number)
+    return new Date(yyyy, (mm ?? 1) - 1, dd ?? 1, 12, 0, 0, 0) // midi = évite les soucis de timezone
+  }
+
+  const findStageForDate = (d: Date) => {
+    const day = new Date(d.getFullYear(), d.getMonth(), d.getDate(), 12, 0, 0, 0)
+
+    const first = journeyStages[0]
+    const last = journeyStages[journeyStages.length - 1]
+    const firstStart = parseFRDate(first.estimatedStartDate)
+    const lastEnd = parseFRDate(last.estimatedEndDate)
+
+    if (day < firstStart) return { kind: "before" as const }
+    if (day > lastEnd) return { kind: "after" as const }
+
+    const match = journeyStages.find((s) => {
+      const start = parseFRDate(s.estimatedStartDate)
+      const end = parseFRDate(s.estimatedEndDate)
+      return day >= start && day <= end
+    })
+
+    return match ? { kind: "match" as const, stageId: match.id } : { kind: "before" as const }
+  }
+
+
+
   useEffect(() => {
     const el = scrollContainerRef.current
     if (!el) return
 
     // Centrer à peu près au démarrage (comme ton code)
-    const scrollAmount = (el.scrollWidth - el.clientWidth) / 2
-    el.scrollLeft = scrollAmount
+    // Au démarrage : centre sur l’étape correspondant à la date du jour
+    const res = findStageForDate(new Date())
+
+// attend une frame pour que les refs soient bien en place
+    requestAnimationFrame(() => {
+      if (res.kind === "match") {
+        centerStageCard(res.stageId, "auto")
+        setSelectedStage(journeyStages.find(s => s.id === res.stageId) ?? journeyStages[0])
+      } else if (res.kind === "before") {
+        el.scrollLeft = 0
+      } else {
+        el.scrollLeft = el.scrollWidth
+      }
+      updateScrollButtons()
+    })
+
 
     updateScrollButtons()
 
@@ -128,6 +187,9 @@ export function RideWidget() {
 
               return (
                   <button
+                      ref={(node) => {
+                        cardRefs.current[stage.id] = node
+                      }}
                       key={stage.id}
                       onClick={() => setSelectedStage(stage)}
                       className={[

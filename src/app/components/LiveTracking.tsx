@@ -52,12 +52,6 @@ export function LiveTracking({ onBack }: LiveTrackingProps) {
     }, []);
     // Mock live data
     const mockLiveData = {
-        position: {
-            lat: 48.8566,
-            lon: 2.3522,
-            location: "Paris, France",
-            lastUpdate: "30 Déc 2025 14:23",
-        },
         currentDay: {
             distance: 87.3,
             duration: "5h 42min",
@@ -95,15 +89,8 @@ export function LiveTracking({ onBack }: LiveTrackingProps) {
             <div className="sticky top-0 z-50 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/80 border-b border-border">
                 <div className="max-w-7xl mx-auto px-4 py-4">
                     <div className="flex items-center gap-4 mb-4">
-                        <Button onClick={onBack} variant="ghost" size="sm" className="gap-2">
-                            <ArrowLeft className="w-4 h-4" />
-                            Retour
-                        </Button>
                         <div className="flex-1">
                             <h1 className="text-2xl font-bold text-foreground">Suivie GPS en Direct</h1>
-                            <p className="text-sm text-muted-foreground">
-                                Données en temps réel • Mis à jour il y a {mockLiveData.position.lastUpdate}
-                            </p>
                         </div>
                         <div className="flex items-center gap-2 bg-green-500/10 px-3 py-1.5 rounded-full border border-green-500/20">
                             <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse" />

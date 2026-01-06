@@ -86,10 +86,6 @@ export function PhotoGallery({ onBack }: PhotoGalleryProps) {
             {/* Header */}
             <div className="sticky top-0 z-50 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/80 border-b border-border">
                 <div className="max-w-7xl mx-auto px-4 py-4 flex items-center gap-4">
-                    <Button onClick={onBack} variant="ghost" size="sm" className="gap-2">
-                        <ArrowLeft className="w-4 h-4" />
-                        Retour
-                    </Button>
                     <div>
                         <h1 className="text-2xl font-bold text-foreground">Galerie Photos</h1>
                         <p className="text-sm text-muted-foreground">Nos plus beaux souvenirs de voyage</p>
