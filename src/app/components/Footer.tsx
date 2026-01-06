@@ -9,7 +9,7 @@ export function Footer() {
           <div className="space-y-4">
             <div className="flex items-center gap-2">
               <MapPin className="w-6 h-6" />
-              <h3 className="text-xl font-bold">Gibraltar → Cap Nord</h3>
+              <h3 className="text-xl font-bold">Tarifa → Cap Nord</h3>
             </div>
             <p className="text-sm text-primary-foreground/80">
               Un voyage à vélo de 6 mois à travers l'Europe
@@ -32,12 +32,22 @@ export function Footer() {
               </li>
               <li>
                 <a
-                  href="https://www.strava.com"
+                  href="https://www.strava.com/athletes/67583671"
                   target="_blank"
                   rel="noopener noreferrer"
                   className="text-sm text-primary-foreground/80 hover:text-primary-foreground transition-colors"
                 >
-                  Strava
+                  Strava Félix
+                </a>
+              </li>
+              <li>
+                <a
+                    href="https://www.strava.com/athletes/29549718"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-sm text-primary-foreground/80 hover:text-primary-foreground transition-colors"
+                >
+                  Strava Olivier
                 </a>
               </li>
               <li>
@@ -47,7 +57,7 @@ export function Footer() {
                   rel="noopener noreferrer"
                   className="text-sm text-primary-foreground/80 hover:text-primary-foreground transition-colors"
                 >
-                  Instagram
+                  Instagram Félix
                 </a>
               </li>
             </ul>
@@ -57,11 +67,11 @@ export function Footer() {
           <div>
             <h4 className="font-bold mb-4">Contact</h4>
             <a
-              href="mailto:contact@adventure.com"
+              href="mailto:quintard.olivier@gmail.com"
               className="inline-flex items-center gap-2 text-sm text-primary-foreground/80 hover:text-primary-foreground transition-colors"
             >
               <Mail className="w-4 h-4" />
-              contact@adventure.com
+              quintard.olivier@gmail.com
             </a>
           </div>
         </div>
@@ -69,7 +79,7 @@ export function Footer() {
         {/* Bottom bar */}
         <div className="pt-8 border-t border-primary-foreground/20">
           <div className="flex flex-col md:flex-row justify-between items-center gap-4 text-sm text-primary-foreground/80">
-            <p>© 2024 Gibraltar → Cap Nord. Tous droits réservés.</p>
+            <p>© 2026 Olivier Quintard. Tous droits réservés.</p>
             <div className="flex gap-4">
               <a href="#" className="hover:text-primary-foreground transition-colors">
                 Mentions légales

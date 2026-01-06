@@ -10,14 +10,21 @@ const followLinks = [
     color: 'from-primary to-accent',
   },
   {
-    name: 'Strava',
+    name: 'Strava Félix',
     description: 'Nos activités et performances',
     icon: ExternalLink,
-    url: 'https://www.strava.com',
+    url: 'https://www.strava.com/athletes/67583671',
     color: 'from-secondary to-primary',
   },
   {
-    name: 'Instagram',
+    name: 'Strava Olivier',
+    description: 'Nos activités et performances',
+    icon: ExternalLink,
+    url: 'https://www.strava.com/athletes/29549718',
+    color: 'from-secondary to-primary',
+  },
+  {
+    name: 'Instagram Félix',
     description: 'Photos et moments du voyage',
     icon: Instagram,
     url: 'https://www.instagram.com',
@@ -37,18 +44,6 @@ export function FollowLinks() {
             <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
               Restez connectés et vivez notre périple à travers nos différentes plateformes
             </p>
-          </div>
-
-          {/* 🔽 Polarsteps embed */}
-          <div className="mb-16">
-            <div className="relative w-full max-w-4xl mx-auto aspect-video rounded-xl overflow-hidden shadow-xl border border-border bg-black">
-              <iframe
-                  src="https://www.polarsteps.com/OlivierTraveler43/19135989-lacanau-lune-de-confiture/embed"
-                  className="absolute inset-0 w-full h-full"
-                  loading="lazy"
-                  referrerPolicy="no-referrer"
-              />
-            </div>
           </div>
 
           {/* Social links */}

@@ -23,12 +23,12 @@ export function HeroSection({ onDiscoverRoute, onShowPhotoGallery, onShowLiveTra
             </div>
 
             <h1 className="text-4xl md:text-6xl lg:text-7xl font-bold text-foreground leading-tight">
-              De Gibraltar au Cap Nord
+              De Tarifa au Cap Nord
             </h1>
 
             <p className="text-lg md:text-xl text-muted-foreground max-w-xl">
               Suivez notre voyage à vélo de 6 mois à travers l'Europe, de la pointe sud de l'Espagne jusqu'aux confins de
-              la Norvège. Une aventure de 6 000 kilomètres au cœur de la nature.
+              la Norvège. Une aventure de plus de 10 000 kilomètres au cœur de la nature.
             </p>
 
             {/* Stats style jeu vidéo */}
@@ -38,15 +38,15 @@ export function HeroSection({ onDiscoverRoute, onShowPhotoGallery, onShowLiveTra
                 <div className="text-xs text-muted-foreground">Mois</div>
               </div>
               <div className="bg-card border border-border rounded-lg p-3 text-center shadow-sm">
-                <div className="text-2xl font-bold text-primary">6</div>
+                <div className="text-2xl font-bold text-primary">8</div>
                 <div className="text-xs text-muted-foreground">Pays</div>
               </div>
               <div className="bg-card border border-border rounded-lg p-3 text-center shadow-sm">
-                <div className="text-2xl font-bold text-primary">6 780</div>
+                <div className="text-2xl font-bold text-primary">10 449</div>
                 <div className="text-xs text-muted-foreground">km</div>
               </div>
               <div className="bg-card border border-border rounded-lg p-3 text-center shadow-sm">
-                <div className="text-2xl font-bold text-primary">48 450</div>
+                <div className="text-2xl font-bold text-primary">106 533</div>
                 <div className="text-xs text-muted-foreground">m D+</div>
               </div>
             </div>

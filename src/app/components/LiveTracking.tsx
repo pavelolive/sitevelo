@@ -116,44 +116,17 @@ export function LiveTracking({ onBack }: LiveTrackingProps) {
             <div className="max-w-7xl mx-auto px-4 py-8 space-y-6">
 
                 {/* Position actuelle */}
-                <Card className="p-6 border-2 border-primary/20">
-                    <div className="flex items-start justify-between mb-4">
-                        <div className="flex items-center gap-3">
-                            <div className="w-10 h-10 bg-primary/10 rounded-full flex items-center justify-center">
-                                <MapPin className="w-5 h-5 text-primary" />
-                            </div>
-                            <div>
-                                <h3 className="font-bold text-foreground">Position Actuelle</h3>
-                                <p className="text-sm text-muted-foreground">{mockLiveData.position.location}</p>
-                            </div>
-                        </div>
-                        <Badge variant="outline" className="gap-1">
-                            <Navigation className="w-3 h-3" />
-                            {mockLiveData.position.lat.toFixed(4)}°N, {mockLiveData.position.lon.toFixed(4)}°E
-                        </Badge>
-                    </div>
-
-                    {/* Carte */}
-                    <div className="bg-muted/30 rounded-lg overflow-hidden border-2 border-border">
+                {/* 🔽 Polarsteps embed */}
+                <div className="mb-16">
+                    <div className="relative w-full max-w-4xl mx-auto aspect-video rounded-xl overflow-hidden shadow-xl border border-border bg-black">
                         <iframe
-                            style={{ width: "100%", height: "300px", border: 0 }}
-                            allowFullScreen
-                            allow="geolocation"
-                            src="//umap.openstreetmap.fr/fr/map/test-kapp_1337944?scaleControl=false&miniMap=false&scrollWheelZoom=false&zoomControl=true&editMode=disabled&moreControl=true&searchControl=null&tilelayersControl=null&embedControl=null&datalayersControl=true&onLoadPanel=none&captionBar=false&captionMenus=true"
+                            src="https://www.polarsteps.com/OlivierTraveler43/19135989-lacanau-lune-de-confiture/embed"
+                            className="absolute inset-0 w-full h-full"
+                            loading="lazy"
+                            referrerPolicy="no-referrer"
                         />
-                        <div className="p-3 bg-card border-t border-border">
-                            <a
-                                href="//umap.openstreetmap.fr/fr/map/test-kapp_1337944?scaleControl=false&miniMap=false&scrollWheelZoom=true&zoomControl=true&editMode=disabled&moreControl=true&searchControl=null&tilelayersControl=null&embedControl=null&datalayersControl=true&onLoadPanel=none&captionBar=false&captionMenus=true"
-                                target="_blank"
-                                rel="noopener noreferrer"
-                                className="inline-flex items-center gap-2 text-sm text-primary hover:text-primary/80 transition-colors"
-                            >
-                                <ExternalLink className="w-4 h-4" />
-                                Voir en plein écran
-                            </a>
-                        </div>
                     </div>
-                </Card>
+                </div>
 
                 {/* Statistiques du jour */}
                 <Card className="p-6">

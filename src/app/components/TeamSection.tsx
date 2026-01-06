@@ -15,14 +15,14 @@ const teamMembers = [
     },
   },
   {
-    name: 'Thomas Leroy',
-    role: 'Photographe & Voyageur',
-    bio: 'Photographe de nature et passionné de bikepacking, Thomas immortalise chaque instant de ce périple. Son œil artistique transforme notre voyage en une galerie d\'émotions.',
-    image: 'https://images.unsplash.com/photo-1623604944442-e11589f39746?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxtYW4lMjBjeWNsaW5nJTIwYWR2ZW50dXJlJTIwbmF0dXJlfGVufDF8fHx8MTc2NzEwNTgzOXww&ixlib=rb-4.1.0&q=80&w=1080&utm_source=figma&utm_medium=referral',
-    badges: ['Artiste', 'Nomade'],
+    name: 'Olivier Quintard',
+    role: 'Cycliste passionné',
+    bio: 'Après plusieurs voyages à vélo, l’envie de partir plus loin s’est imposée. Cette aventure est l’occasion de découvrir de nouveaux paysages, de prendre le temps du voyage et de privilégier une manière de se déplacer la plus respectueuse possible.',
+    image: 'https://lh3.googleusercontent.com/pw/AP1GczNoePBW4vtotEbijWPu_-Et7T4W44zgzU-njKlMey6vvjgkionfUMOkI3vv3S6nPOgO2zJxUSvav71teqc43u1ojbUzYf_OMQBYSjToLXqZolVv2s5_Mrb0yn8cBU1RdBgJ_LGvlvM0QY3GggEDnGgcpg=w735-h1307-s-no?authuser=0',
+    badges: ['Cycliste', 'Caméraman', 'Influvoleur'],
     stats: {
-      experience: '8 ans',
-      trips: '12+',
+      experience: '33 ans',
+      trips: '4',
     },
   },
 ];
@@ -53,48 +53,45 @@ export function TeamSection() {
             >
               {/* Image */}
               <div className="relative h-80 overflow-hidden">
-                <img
-                  src={member.image}
-                  alt={member.name}
-                  className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
-                  style={{
-                    filter: 'contrast(0.85) saturate(0.8) brightness(1.05) sepia(0.15)',
-                  }}
-                />
-                <div className="absolute inset-0">
+                {/* Background + gradient (derrière) */}
+                <div className="absolute inset-0 z-0">
                   <img
-                    src="https://images.unsplash.com/photo-1600426103380-558979d1198e?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxjeWNsaW5nJTIwbmF0dXJlJTIwbGFuZHNjYXBlfGVufDF8fHx8MTc2NzEwNTgwMHww&ixlib=rb-4.1.0&q=80&w=1080&utm_source=figma&utm_medium=referral"
-                    alt="Cycling background"
-                    className="w-full h-full object-cover"
+                      src="https://images.unsplash.com/photo-1600426103380-558979d1198e?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=1080"
+                      alt="Cycling background"
+                      className="w-full h-full object-cover"
                   />
                   <div className="absolute inset-0 bg-gradient-to-b from-background/95 via-background/85 to-background/95"></div>
                 </div>
-                
-                {/* Badges sur l'image */}
-                <div className="absolute top-4 right-4 flex flex-wrap gap-2 justify-end">
+
+                {/* Photo du membre (devant) */}
+                <img
+                    src={member.image}
+                    alt={member.name}
+                    className="relative z-10 w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                    style={{
+                      filter: "contrast(0.85) saturate(0.8) brightness(1.05) sepia(0.15)",
+                    }}
+                />
+
+                {/* Badges */}
+                <div className="absolute top-4 right-4 z-20 flex flex-wrap gap-2 justify-end">
                   {member.badges.map((badge) => (
-                    <Badge
-                      key={badge}
-                      className="bg-primary/90 text-primary-foreground backdrop-blur-sm shadow-lg border border-white/20"
-                    >
-                      {badge}
-                    </Badge>
+                      <Badge
+                          key={badge}
+                          className="bg-primary/90 text-primary-foreground backdrop-blur-sm shadow-lg border border-white/20"
+                      >
+                        {badge}
+                      </Badge>
                   ))}
                 </div>
-                
-                {/* Stats overlay style jeu vidéo */}
-                <div className="absolute bottom-4 left-4 right-4 flex gap-2">
-                  <div className="flex-1 bg-white/90 backdrop-blur-sm rounded-lg p-2 text-center">
-                    <div className="text-xs text-muted-foreground">Expérience</div>
-                    <div className="font-bold text-primary">{member.stats.experience}</div>
-                  </div>
-                  <div className="flex-1 bg-white/90 backdrop-blur-sm rounded-lg p-2 text-center">
-                    <div className="text-xs text-muted-foreground">Voyages</div>
-                    <div className="font-bold text-primary">{member.stats.trips}</div>
-                  </div>
+
+                {/* Stats */}
+                <div className="absolute bottom-4 left-4 right-4 z-20 flex gap-2">
+                  ...
                 </div>
               </div>
-              
+
+
               {/* Contenu */}
               <div className="p-6 space-y-4">
                 <div className="flex items-start justify-between">
