@@ -19,7 +19,7 @@ const teamMembers = [
     role: 'Cycliste passionné',
     bio: 'Après plusieurs voyages à vélo, l’envie de partir plus loin s’est imposée. Cette aventure est l’occasion de découvrir de nouveaux paysages, de prendre le temps du voyage et de privilégier une manière de se déplacer la plus respectueuse possible.',
     image: 'https://lh3.googleusercontent.com/pw/AP1GczNoePBW4vtotEbijWPu_-Et7T4W44zgzU-njKlMey6vvjgkionfUMOkI3vv3S6nPOgO2zJxUSvav71teqc43u1ojbUzYf_OMQBYSjToLXqZolVv2s5_Mrb0yn8cBU1RdBgJ_LGvlvM0QY3GggEDnGgcpg=w735-h1307-s-no?authuser=0',
-    badges: ['Cycliste', 'Caméraman', 'Influvoleur'],
+    badges: ['Cycliste', 'Caméraman'],
     stats: {
       experience: '33 ans',
       trips: '4',
@@ -29,7 +29,7 @@ const teamMembers = [
 
 export function TeamSection() {
   return (
-    <section className="py-20 px-4 bg-muted/60">
+    <section className="py-20 px-4 bg-primary-foreground">
       <div className="max-w-6xl mx-auto">
         <div className="text-center mb-12 space-y-4">
           <div className="inline-flex items-center gap-2 bg-accent/20 text-accent-foreground px-4 py-2 rounded-full border border-accent/30">
@@ -78,7 +78,7 @@ export function TeamSection() {
                   {member.badges.map((badge) => (
                       <Badge
                           key={badge}
-                          className="bg-primary/90 text-primary-foreground backdrop-blur-sm shadow-lg border border-white/20"
+                          className="bg-socials text-primary-foreground backdrop-blur-sm shadow-lg border border-white/20"
                       >
                         {badge}
                       </Badge>
@@ -103,7 +103,6 @@ export function TeamSection() {
                       {member.role}
                     </p>
                   </div>
-                  <Award className="w-6 h-6 text-accent" />
                 </div>
                 
                 <p className="text-muted-foreground leading-relaxed">

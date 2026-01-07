@@ -2,7 +2,6 @@
 
 import { ArrowRight, Compass, Camera, Radio } from "lucide-react"
 import { Button } from "./ui/button"
-import { RouteMap } from "./RouteMap"
 
 interface HeroSectionProps {
   onDiscoverRoute: () => void
@@ -12,10 +11,15 @@ interface HeroSectionProps {
 
 export function HeroSection({ onDiscoverRoute, onShowPhotoGallery, onShowLiveTracking }: HeroSectionProps) {
   return (
-      <section className="relative min-h-[50vh] flex items-center justify-center overflow-hidden px-4 py-12 md:py-16 bg-gradient-to-br from-background via-muted/30 to-accent/10">
+      <section className="relative min-h-[50vh] flex items-center justify-center overflow-hidden px-4 pb-12 md:pb-16 bg-primary-foreground from-background via-muted/30 to-accent/10">
+        <img
+            src="/map-trace.svg"
+            alt="Image d'accueil"
+            className="hidden md:block absolute top-0 right-0 h-fullè object-cover"
+        />
         <div className="relative z-10 max-w-7xl mx-auto grid md:grid-cols-2 gap-12 items-center">
           {/* Contenu textuel */}
-          <div className="space-y-6 text-center md:text-left">
+          <div className="space-y-6 pt-12 md:pt-16 text-center md:text-left">
             {/* Badge adventure */}
             <div className="inline-flex items-center gap-2 bg-accent/20 text-accent-foreground px-4 py-2 rounded-full border border-accent/30">
               <Compass className="w-4 h-4" />
@@ -61,18 +65,6 @@ export function HeroSection({ onDiscoverRoute, onShowPhotoGallery, onShowLiveTra
                 <ArrowRight className="w-5 h-5 ml-2 group-hover:translate-x-1 transition-transform" />
               </Button>
 
-              {onShowPhotoGallery && (
-                  <Button
-                      onClick={onShowPhotoGallery}
-                      size="lg"
-                      variant="outline"
-                      className="shadow-lg group w-full sm:w-auto bg-transparent"
-                  >
-                    Galerie photos
-                    <Camera className="w-5 h-5 ml-2 group-hover:scale-110 transition-transform" />
-                  </Button>
-              )}
-
               {onShowLiveTracking && (
                   <Button
                       onClick={onShowLiveTracking}
@@ -84,17 +76,23 @@ export function HeroSection({ onDiscoverRoute, onShowPhotoGallery, onShowLiveTra
                     <Radio className="w-5 h-5 ml-2 group-hover:scale-110 transition-transform" />
                   </Button>
               )}
+
+              {onShowPhotoGallery && (
+                  <Button
+                      onClick={onShowPhotoGallery}
+                      size="lg"
+                      variant="outline"
+                      className="shadow-lg group w-full sm:w-auto bg-transparent"
+                  >
+                    Galerie photos
+                    <Camera className="w-5 h-5 ml-2 group-hover:scale-110 transition-transform" />
+                  </Button>
+              )}
             </div>
           </div>
 
           {/* Image à droite */}
-          <div className="relative hidden md:block">
-            <div className="relative rounded-2xl overflow-hidden shadow-2xl bg-card border-2 border-border p-4 h-[400px]">
-              <div className="h-full flex items-center justify-center overflow-hidden">
-                <RouteMap />
-              </div>
-            </div>
-          </div>
+
         </div>
       </section>
   )

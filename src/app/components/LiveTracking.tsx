@@ -86,8 +86,8 @@ export function LiveTracking({ onBack }: LiveTrackingProps) {
     return (
         <div className="min-h-screen bg-background">
             {/* Header */}
-            <div className="sticky top-0 z-50 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/80 border-b border-border">
-                <div className="max-w-7xl mx-auto px-4 py-4">
+            <div className="bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/80 border-b border-border">
+            <div className="max-w-7xl mx-auto px-4 py-4">
                     <div className="flex items-center gap-4 mb-4">
                         <div className="flex-1">
                             <h1 className="text-2xl font-bold text-foreground">Suivie GPS en Direct</h1>

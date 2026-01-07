@@ -7,34 +7,34 @@ const followLinks = [
     description: 'Suivez notre itinéraire en temps réel',
     icon: MapPin,
     url: 'https://www.polarsteps.com',
-    color: 'from-primary to-accent',
+    color: 'from-socials to-socials',
   },
   {
     name: 'Strava Félix',
     description: 'Nos activités et performances',
     icon: ExternalLink,
     url: 'https://www.strava.com/athletes/67583671',
-    color: 'from-secondary to-primary',
+    color: 'from-socials to-socials',
   },
   {
     name: 'Strava Olivier',
     description: 'Nos activités et performances',
     icon: ExternalLink,
     url: 'https://www.strava.com/athletes/29549718',
-    color: 'from-secondary to-primary',
+    color: 'from-socials to-socials',
   },
   {
     name: 'Instagram Félix',
     description: 'Photos et moments du voyage',
     icon: Instagram,
     url: 'https://www.instagram.com',
-    color: 'from-accent to-secondary',
+    color: 'from-socials to-socials',
   },
 ];
 
 export function FollowLinks() {
   return (
-      <section className="py-20 px-4 bg-accent/20">
+      <section className="py-20 px-4 bg-muted">
         <div className="max-w-6xl mx-auto">
           {/* Header */}
           <div className="text-center mb-12 space-y-4">
@@ -76,7 +76,7 @@ export function FollowLinks() {
                         </div>
 
                         <div className="mt-auto pt-4">
-                          <div className="inline-flex items-center gap-2 px-4 py-2 bg-primary/10 text-primary rounded-full text-sm group-hover:bg-primary group-hover:text-primary-foreground transition-colors">
+                          <div className="inline-flex items-center gap-2 px-4 py-2 bg-accent text-primary rounded-full text-sm group-hover:bg-primary group-hover:text-primary-foreground transition-colors">
                             <span>Visiter</span>
                             <ExternalLink className="w-4 h-4" />
                           </div>

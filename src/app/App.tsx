@@ -1,102 +1,102 @@
 "use client"
 
-import { useState } from "react"
+import { BrowserRouter, Routes, Route, useNavigate, useLocation } from "react-router-dom"
 import { HeroSection } from "./components/HeroSection"
 import { FollowLinks } from "./components/FollowLinks"
 import { TeamSection } from "./components/TeamSection"
 import { Footer } from "./components/Footer"
 import { PhotoGallery } from "./components/PhotoGallery"
 import { LiveTracking } from "./components/LiveTracking"
-import { HeaderNav } from "./components/HeaderNav"
 import { RideWidget } from "./components/RideWidget"
+import { HeaderNav } from "./components/HeaderNav"
+import { AdminPhotoUpload } from "./components/AdminPhotoUpload"
 
-export default function App() {
-  const [showRouteDetails, setShowRouteDetails] = useState(false)
-  const [showPhotoGallery, setShowPhotoGallery] = useState(false)
-  const [showLiveTracking, setShowLiveTracking] = useState(false)
+function AppShell() {
+  const navigate = useNavigate()
+  const location = useLocation()
 
   const scrollToTop = () => window.scrollTo({ top: 0, behavior: "smooth" })
 
   const goHome = () => {
-    setShowRouteDetails(false)
-    setShowPhotoGallery(false)
-    setShowLiveTracking(false)
+    navigate("/")
     scrollToTop()
   }
 
-  const handleDiscoverRoute = () => {
-    setShowRouteDetails(true)
-    setShowPhotoGallery(false)
-    setShowLiveTracking(false)
+  const onDiscoverRoute = () => {
+    navigate("/route")
     scrollToTop()
   }
 
-  const handleShowPhotoGallery = () => {
-    setShowPhotoGallery(true)
-    setShowRouteDetails(false)
-    setShowLiveTracking(false)
+  const onShowGallery = () => {
+    navigate("/gallery")
     scrollToTop()
   }
 
-  const handleShowLiveTracking = () => {
-    setShowLiveTracking(true)
-    setShowRouteDetails(false)
-    setShowPhotoGallery(false)
+  const onShowTracking = () => {
+    navigate("/tracking")
     scrollToTop()
   }
 
-  const activePage = showRouteDetails
-      ? "route"
-      : showPhotoGallery
-          ? "gallery"
-          : showLiveTracking
-              ? "tracking"
-              : "home"
+  // Optionnel : activePage basé sur l’URL
+  const activePage =
+      location.pathname.startsWith("/admin/photos") ? "admin"
+          : location.pathname.startsWith("/route") ? "route"
+              : location.pathname.startsWith("/gallery") ? "gallery"
+                  : location.pathname.startsWith("/tracking") ? "tracking"
+                      : "home"
 
   return (
       <div className="min-h-screen bg-background">
         <HeaderNav
             activePage={activePage}
             onGoHome={goHome}
-            onDiscoverRoute={handleDiscoverRoute}
-            onShowPhotoGallery={handleShowPhotoGallery}
-            onShowLiveTracking={handleShowLiveTracking}
+            onDiscoverRoute={onDiscoverRoute}
+            onShowLiveTracking={onShowTracking}
+            onShowPhotoGallery={onShowGallery}
+            // 👉 bouton admin temporaire : tu peux l’enlever plus tard
+            // onShowAdminUpload={() => { navigate("/admin/photos"); scrollToTop() }}
         />
 
-        {showRouteDetails ? (
-            <>
-              <div className="min-h-screen bg-background">
+        <Routes>
+          <Route
+              path="/"
+              element={
+                <>
+                  <HeroSection
+                      onDiscoverRoute={onDiscoverRoute}
+                      onShowLiveTracking={onShowTracking}
+                      onShowPhotoGallery={onShowGallery}
+                  />
+                  <FollowLinks />
+                  <TeamSection />
+                </>
+              }
+          />
+
+          <Route
+              path="/route"
+              element={
                 <div className="max-w-7xl mx-auto px-4 py-12">
-                  <h1 className="text-2xl font-bold text-foreground mb-6">
-                    Découvrir le tracé
-                  </h1>
+                  <h1 className="text-2xl font-bold text-foreground mb-6">Découvrir le tracé</h1>
                   <RideWidget />
                 </div>
-              </div>
-              <Footer />
-            </>
-        ) : showPhotoGallery ? (
-            <>
-              <PhotoGallery onBack={goHome} />
-              <Footer />
-            </>
-        ) : showLiveTracking ? (
-            <>
-              <LiveTracking onBack={goHome} />
-              <Footer />
-            </>
-        ) : (
-            <>
-              <HeroSection
-                  onDiscoverRoute={handleDiscoverRoute}
-                  onShowPhotoGallery={handleShowPhotoGallery}
-                  onShowLiveTracking={handleShowLiveTracking}
-              />
-              <FollowLinks />
-              <TeamSection />
-              <Footer />
-            </>
-        )}
+              }
+          />
+
+          <Route path="/gallery" element={<PhotoGallery onBack={goHome} />} />
+          <Route path="/tracking" element={<LiveTracking onBack={goHome} />} />
+          <Route path="/admin/photos" element={<AdminPhotoUpload />} />
+        </Routes>
+
+        <Footer />
       </div>
+  )
+}
+
+export default function App() {
+  return (
+      <BrowserRouter>
+        <AppShell />
+      </BrowserRouter>
   )
 }

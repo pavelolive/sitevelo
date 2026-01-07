@@ -141,7 +141,7 @@ export function RideWidget() {
   return (
       <div className="w-full space-y-6">
         {/* Étapes */}
-        <Card className="p-4 bg-muted/30">
+        <Card className="p-4 bg-muted/30 bg-card">
           <div className="flex items-center justify-between mb-4 gap-3">
             <h3 className="text-lg font-bold text-foreground">Étapes du voyage</h3>
 
@@ -172,7 +172,7 @@ export function RideWidget() {
 
           <div
               ref={scrollContainerRef}
-              className="flex gap-4 overflow-x-auto pb-3 snap-x snap-mandatory scrollbar-thin scrollbar-thumb-primary scrollbar-track-muted"
+              className="flex gap-4 overflow-x-auto pb-3 pt-3 snap-x snap-mandatory scrollbar-thin scrollbar-thumb-primary scrollbar-track-muted"
               style={{ scrollbarWidth: "thin" }}
           >
             {journeyStages.map((stage) => {
