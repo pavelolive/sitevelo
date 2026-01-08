@@ -15,7 +15,7 @@ export function HeroSection({ onDiscoverRoute, onShowPhotoGallery, onShowLiveTra
         <img
             src="/map-trace.svg"
             alt="Image d'accueil"
-            className="hidden md:block absolute top-0 right-0 h-fullè object-cover"
+            className="hidden md:block absolute top-0 right-0 h-full object-cove"
         />
         <div className="relative z-10 max-w-7xl mx-auto grid md:grid-cols-2 gap-12 items-center">
           {/* Contenu textuel */}

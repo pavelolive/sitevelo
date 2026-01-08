@@ -4,9 +4,9 @@ import { Badge } from './ui/badge';
 
 const teamMembers = [
   {
-    name: 'Alex Martin',
+    name: 'Félix',
     role: 'Cycliste passionné',
-    bio: 'Amoureux des grands espaces et des défis sportifs, Alex rêvait depuis toujours de traverser l\'Europe à vélo. Cette aventure est l\'accomplissement d\'un rêve de longue date.',
+    bio: 'Après plusieurs années à rêver de cette traversée, l’envie de ralentir et de se reconnecter à l’essentiel s’est imposée. Entre passion pour le vélo, amour des grands espaces et engagement pour l’environnement, ce voyage devient une manière de lier aventure, nature et contemplation des paysages qui inspirent tant.',
     image: 'https://images.unsplash.com/photo-1635702961362-bbc21a0f81a6?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxtYWxlJTIwY3ljbGlzdCUyMHBvcnRyYWl0JTIwb3V0ZG9vcnxlbnwxfHx8fDE3NjcxMDU4Mzl8MA&ixlib=rb-4.1.0&q=80&w=1080&utm_source=figma&utm_medium=referral',
     badges: ['Explorateur', 'Aventurier'],
     stats: {
