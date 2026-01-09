@@ -24,6 +24,18 @@ type LatestActivityResponse = {
     error?: string;
 };
 
+type TotalActivityResponse = {
+    ok: boolean;
+    activity: null | {
+        name: string;
+        distance_km: number;
+        elevation_gain_m: number;
+        moving_time_s: number;
+        avg_speed_kmh: number;
+    };
+    error?: string;
+};
+
 function formatDuration(seconds: number) {
     const h = Math.floor(seconds / 3600);
     const m = Math.floor((seconds % 3600) / 60);
@@ -34,6 +46,7 @@ export function LiveTracking({ onBack }: LiveTrackingProps) {
     const [selectedStage, setSelectedStage] = useState(journeyStages[5]) // Default to Paris
     const scrollContainerRef = useRef<HTMLDivElement>(null)
     const [latest, setLatest] = useState<LatestActivityResponse | null>(null);
+    const [total, setTotal] = useState<TotalActivityResponse | null>(null);
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
@@ -50,21 +63,24 @@ export function LiveTracking({ onBack }: LiveTrackingProps) {
             }
         })();
     }, []);
+
+    useEffect(() => {
+        (async () => {
+            try {
+                setLoading(true);
+                const r = await fetch("/api/strava/total", { cache: "no-store" });
+                const data = (await r.json()) as TotalActivityResponse;
+                setTotal(data);
+            } catch (e) {
+                setTotal({ ok: false, activity: null, error: String(e) });
+            } finally {
+                setLoading(false);
+            }
+        })();
+    }, []);
+
     // Mock live data
     const mockLiveData = {
-        currentDay: {
-            distance: 87.3,
-            duration: "5h 42min",
-            avgSpeed: 15.3,
-            elevationGain: 420,
-            elevationLoss: 380,
-        },
-        stats: {
-            totalDistance: 2145,
-            avgSpeed: 16.8,
-            elevationGain: 18500,
-            totalTime: "128h 15min",
-        },
         progress: {
             percentage: 28,
             daysElapsed: 42,
@@ -176,17 +192,17 @@ export function LiveTracking({ onBack }: LiveTrackingProps) {
 
                             <div>
                                 <div className="text-sm text-muted-foreground">Distance totale</div>
-                                <div className="text-xl font-bold text-foreground">{mockLiveData.stats.totalDistance} km</div>
+                                <div className="text-xl font-bold text-foreground">{loading ? "…" : total?.activity ? `${total.activity.distance_km} km` : "—"}</div>
                             </div>
 
                             <div>
                                 <div className="text-sm text-muted-foreground">Vitesse moyenne</div>
-                                <div className="text-xl font-bold text-foreground">{mockLiveData.stats.avgSpeed} km/h</div>
+                                <div className="text-xl font-bold text-foreground">{loading ? "…" : total?.activity ? `${total.activity.avg_speed_kmh} km/h` : "—"}</div>
                             </div>
 
                             <div>
                                 <div className="text-sm text-muted-foreground">Dénivelé cumulé</div>
-                                <div className="text-xl font-bold text-foreground">{mockLiveData.stats.elevationGain} m</div>
+                                <div className="text-xl font-bold text-foreground">{loading ? "…" : total?.activity ? `${total.activity.elevation_gain_m} m` : "—"}</div>
                             </div>
 
                             <div>
@@ -201,7 +217,7 @@ export function LiveTracking({ onBack }: LiveTrackingProps) {
 
                             <div>
                                 <div className="text-sm text-muted-foreground">Temps total</div>
-                                <div className="text-xl font-bold text-foreground">{mockLiveData.stats.totalTime}</div>
+                                <div className="text-xl font-bold text-foreground">{loading ? "…" : total?.activity ? formatDuration(total.activity.moving_time_s) : "—"}</div>
                             </div>
                         </div>
                     </div>
