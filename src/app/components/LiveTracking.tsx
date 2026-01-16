@@ -7,6 +7,10 @@ import { Badge } from "./ui/badge"
 import { journeyStages } from "../data/journeyStages"
 import { useState, useRef, useEffect } from "react"
 
+import 'leaflet/dist/leaflet.css';
+import { MapContainer, TileLayer, Polyline, useMap } from "react-leaflet";
+import { Marker, Popup } from "react-leaflet";
+
 interface LiveTrackingProps {
     onBack: () => void
 }
@@ -35,6 +39,59 @@ type TotalActivityResponse = {
     };
     error?: string;
 };
+
+function FitBounds({ positions }: { positions: [number, number][] }) {
+  const map = useMap();
+  useEffect(() => {
+    if (positions.length) {
+      map.fitBounds(positions);
+    }
+  }, [positions, map]);
+  return null;
+}
+
+export function GPXMap({ gpxUrl }: { gpxUrl: string }) {
+  const [positions, setPositions] = useState<[number, number][]>([]);
+
+  useEffect(() => {
+    fetch(gpxUrl)
+      .then((res) => res.text())
+      .then((gpxText) => {
+        const parser = new DOMParser();
+        const xml = parser.parseFromString(gpxText, "application/xml");
+        const trkpts = Array.from(xml.getElementsByTagName("trkpt"));
+
+        const coords: [number, number][] = trkpts.map((pt) => [
+          parseFloat(pt.getAttribute("lat")!),
+          parseFloat(pt.getAttribute("lon")!),
+        ]);
+
+        setPositions(coords);
+      })
+      .catch(console.error);
+  }, [gpxUrl]);
+
+  if (!positions.length) return <p>Chargement de la trace…</p>;
+
+  return (
+    <MapContainer
+      style={{ width: "100%", height: "400px", borderRadius: "12px" }}
+      center={positions[0]}
+      zoom={10}
+      scrollWheelZoom
+    >
+      <TileLayer
+        url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+        attribution="© OpenStreetMap"
+      />
+      <Marker position={positions[0]}>
+        <Popup>Départ (Tarifa)</Popup>
+      </Marker>
+      <Polyline positions={positions} pathOptions={{ color: "#e53935", weight: 3 }} />
+      <FitBounds positions={positions} />
+    </MapContainer>
+  );
+}
 
 function formatDuration(seconds: number) {
     const h = Math.floor(seconds / 3600);
@@ -121,13 +178,8 @@ export function LiveTracking({ onBack }: LiveTrackingProps) {
                 {/* Position actuelle */}
                 {/* 🔽 Polarsteps embed */}
                 <div className="mb-16">
-                    <div className="relative w-full max-w-4xl mx-auto aspect-video rounded-xl overflow-hidden shadow-xl border border-border bg-black">
-                        <iframe
-                            src="https://www.polarsteps.com/OlivierTraveler43/19135989-lacanau-lune-de-confiture/embed"
-                            className="absolute inset-0 w-full h-full"
-                            loading="lazy"
-                            referrerPolicy="no-referrer"
-                        />
+                    <div className="relative w-full max-w-4xl mx-auto rounded-xl overflow-hidden shadow-xl border border-border bg-black">
+                        <GPXMap gpxUrl="/api/strava/merged" />
                     </div>
                 </div>
 
