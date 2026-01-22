@@ -9,7 +9,7 @@ export function Footer() {
           <div className="space-y-4">
             <div className="flex items-center gap-2">
               <MapPin className="w-6 h-6" />
-              <h3 className="text-xl font-bold">Tarifa → Cap Nord</h3>
+              <h3 className="text-xl font-bold">Edges of Europe</h3>
             </div>
             <p className="text-sm text-primary-foreground/80">
               Un voyage à vélo de 6 mois à travers l'Europe

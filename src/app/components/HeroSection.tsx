@@ -15,18 +15,19 @@ export function HeroSection({ onDiscoverRoute, onShowPhotoGallery, onShowLiveTra
         <img
             src="/map-trace.svg"
             alt="Image d'accueil"
-            className="hidden md:block absolute top-0 right-0 h-full object-cove"
+            className="hidden md:block absolute top-0 right-[-100px] h-full object-cove"
         />
         <div className="relative z-10 max-w-7xl mx-auto grid md:grid-cols-2 gap-12 items-center">
           {/* Contenu textuel */}
           <div className="space-y-6 pt-12 md:pt-16 text-center md:text-left">
             <h1 className="text-4xl md:text-6xl lg:text-7xl font-bold text-foreground leading-tight">
-              De Tarifa au Cap Nord
+              The Edges of Europe project 
             </h1>
 
             <p className="text-lg md:text-xl text-muted-foreground max-w-xl">
-              Suivez notre voyage à vélo de 6 mois à travers l'Europe, de la pointe sud de l'Espagne jusqu'aux confins de
-              la Norvège. Une aventure de plus de 10 000 kilomètres au cœur de la nature.
+              6 mois pour traverser l’Europe continentale à vélo depuis Tarifa en Espagne, son point le plus au sud, 
+              jusqu’à son point le plus au nord en Norvège, Nordkapp. 
+              Une aventure de plus de 10 000km à travers ses plus belles routes et chemins gravel.
             </p>
 
             {/* Stats style jeu vidéo */}

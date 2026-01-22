@@ -5,7 +5,7 @@ import { Card } from './ui/card';
 const followLinks = [
   {
     name: 'Polarsteps',
-    description: 'Suivez notre itinéraire en temps réel',
+    description: 'Notre journal de bord',
     icon: MapPin,
     url: 'https://www.polarsteps.com',
     color: 'from-socials to-socials',

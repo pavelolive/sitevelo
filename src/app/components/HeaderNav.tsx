@@ -42,7 +42,7 @@ export function HeaderNav({
 
                     <div className="flex items-center gap-2 min-w-0">
                         <div className="min-w-0">
-                            <div className="font-semibold leading-tight truncate">Tarifa → Cap Nord</div>
+                            <div className="font-semibold leading-tight truncate">Edges of Europe</div>
                             <div className="text-xs text-muted-foreground truncate">Voyage à vélo</div>
                         </div>
                     </div>
