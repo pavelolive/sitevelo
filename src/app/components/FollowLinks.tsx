@@ -1,4 +1,5 @@
-import { Instagram, ExternalLink, MapPin } from 'lucide-react';
+import { ExternalLink, MapPin } from 'lucide-react';
+import { SiStrava, SiInstagram } from 'react-icons/si'
 import { Card } from './ui/card';
 
 const followLinks = [
@@ -12,22 +13,22 @@ const followLinks = [
   {
     name: 'Strava Félix',
     description: 'Nos activités et performances',
-    icon: ExternalLink,
+    icon: SiStrava,
     url: 'https://www.strava.com/athletes/67583671',
     color: 'from-socials to-socials',
   },
   {
     name: 'Strava Olivier',
     description: 'Nos activités et performances',
-    icon: ExternalLink,
+    icon: SiStrava,
     url: 'https://www.strava.com/athletes/29549718',
     color: 'from-socials to-socials',
   },
   {
     name: 'Instagram Félix',
     description: 'Photos et moments du voyage',
-    icon: Instagram,
-    url: 'https://www.instagram.com',
+    icon: SiInstagram,
+    url: 'https://www.instagram.com/felix_larrouy/',
     color: 'from-socials to-socials',
   },
 ];

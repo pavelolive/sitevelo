@@ -52,7 +52,7 @@ export function Footer() {
               </li>
               <li>
                 <a
-                  href="https://www.instagram.com"
+                  href="https://www.instagram.com/felix_larrouy/"
                   target="_blank"
                   rel="noopener noreferrer"
                   className="text-sm text-primary-foreground/80 hover:text-primary-foreground transition-colors"
