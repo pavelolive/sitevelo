@@ -1,9 +1,19 @@
+"use client"
+
 import { Card } from "./ui/card"
 import { Badge } from "./ui/badge"
 import { Button } from "./ui/button"
-import { MapPin, Navigation, ExternalLink, ChevronLeft, ChevronRight } from "lucide-react"
+import { MapPin, ExternalLink, ChevronLeft, ChevronRight } from "lucide-react"
 import { useEffect, useMemo, useRef, useState } from "react"
 import { journeyStages } from "../data/journeyStages"
+
+// Leaflet / React-Leaflet
+import { MapContainer, TileLayer, useMap } from "react-leaflet"
+import "leaflet/dist/leaflet.css"
+import L from "leaflet"
+
+// Plugin GPX (Leaflet)
+import "leaflet-gpx"
 
 type LatestActivityResponse = {
   ok: boolean
@@ -18,11 +28,66 @@ type LatestActivityResponse = {
   error?: string
 }
 
+/**
+ * Composant interne: charge un GPX dans Leaflet et fit bounds.
+ * Le plugin leaflet-gpx ajoute L.GPX.
+ */
+function GPXLayer({ gpxUrl }: { gpxUrl: string }) {
+  const map = useMap()
+
+  useEffect(() => {
+    if (!map) return
+
+    // @ts-expect-error: leaflet-gpx injecte L.GPX (pas typé)
+    const gpx = new L.GPX(gpxUrl, {
+      async: true,
+
+      polyline_options: {
+        opacity: 0.9,
+        weight: 4,
+      },
+
+      // ✅ API leaflet-gpx (mpetazzoni)
+      markers: {
+        // start/end du track
+        startIcon: null,
+        endIcon: null,
+
+        // waypoints (si ton GPX en contient)
+        wptIcons: { "": null },
+        wptTypeIcons: { "": null },
+
+        // points nommés -> désactivés
+        pointMatchers: [],
+      },
+
+      // ✅ et si tu veux carrément ne pas parser les waypoints:
+      gpx_options: {
+        parseElements: ["track", "route"], // pas "waypoint"
+      },
+    })
+
+    gpx.on("loaded", (e: any) => {
+      const bounds = e.target.getBounds()
+      if (bounds && bounds.isValid()) {
+        map.fitBounds(bounds, { padding: [20, 20] })
+      }
+    })
+
+    gpx.addTo(map)
+
+    return () => {
+      map.removeLayer(gpx)
+    }
+  }, [map, gpxUrl])
+
+  return null
+}
+
 export function RideWidget() {
   const [selectedStage, setSelectedStage] = useState(journeyStages[0])
   const scrollContainerRef = useRef<HTMLDivElement>(null)
   const cardRefs = useRef<Record<number, HTMLButtonElement | null>>({})
-
 
   const [latest, setLatest] = useState<LatestActivityResponse | null>(null)
   const [loading, setLoading] = useState(true)
@@ -30,10 +95,13 @@ export function RideWidget() {
   const [canScrollLeft, setCanScrollLeft] = useState(false)
   const [canScrollRight, setCanScrollRight] = useState(false)
 
+  // évite de rendre la map avant le client (utile si ton app fait du SSR)
+  const [isClient, setIsClient] = useState(false)
+  useEffect(() => setIsClient(true), [])
+
   const updateScrollButtons = () => {
     const el = scrollContainerRef.current
     if (!el) return
-    // petite marge pour éviter les flottants
     const epsilon = 2
     setCanScrollLeft(el.scrollLeft > epsilon)
     setCanScrollRight(el.scrollLeft + el.clientWidth < el.scrollWidth - epsilon)
@@ -54,17 +122,15 @@ export function RideWidget() {
     const containerRect = container.getBoundingClientRect()
     const cardRect = card.getBoundingClientRect()
 
-    // card center relative to container scroll
-    const cardCenter = (cardRect.left - containerRect.left) + cardRect.width / 2
+    const cardCenter = cardRect.left - containerRect.left + cardRect.width / 2
     const targetScrollLeft = container.scrollLeft + cardCenter - container.clientWidth / 2
 
     container.scrollTo({ left: targetScrollLeft, behavior })
   }
 
   const parseFRDate = (s: string) => {
-    // "23/06/2026"
     const [dd, mm, yyyy] = s.split("/").map(Number)
-    return new Date(yyyy, (mm ?? 1) - 1, dd ?? 1, 12, 0, 0, 0) // midi = évite les soucis de timezone
+    return new Date(yyyy, (mm ?? 1) - 1, dd ?? 1, 12, 0, 0, 0)
   }
 
   const findStageForDate = (d: Date) => {
@@ -87,21 +153,16 @@ export function RideWidget() {
     return match ? { kind: "match" as const, stageId: match.id } : { kind: "before" as const }
   }
 
-
-
   useEffect(() => {
     const el = scrollContainerRef.current
     if (!el) return
 
-    // Centrer à peu près au démarrage (comme ton code)
-    // Au démarrage : centre sur l’étape correspondant à la date du jour
     const res = findStageForDate(new Date())
 
-// attend une frame pour que les refs soient bien en place
     requestAnimationFrame(() => {
       if (res.kind === "match") {
         centerStageCard(res.stageId, "auto")
-        setSelectedStage(journeyStages.find(s => s.id === res.stageId) ?? journeyStages[0])
+        setSelectedStage(journeyStages.find((s) => s.id === res.stageId) ?? journeyStages[0])
       } else if (res.kind === "before") {
         el.scrollLeft = 0
       } else {
@@ -109,7 +170,6 @@ export function RideWidget() {
       }
       updateScrollButtons()
     })
-
 
     updateScrollButtons()
 
@@ -138,6 +198,13 @@ export function RideWidget() {
     })()
   }, [])
 
+  // ✅ Mets ici le chemin vers ton fichier GPX dans /public
+  const gpxUrl = "/gpx/tarifa-nordkapp.gpx"
+
+  // Centre initial (sera overridé par fitBounds quand le GPX est chargé)
+  const initialCenter: [number, number] = [46.5, 2.5]
+  const initialZoom = 5
+
   return (
       <div className="w-full space-y-6">
         {/* Étapes */}
@@ -145,7 +212,6 @@ export function RideWidget() {
           <div className="flex items-center justify-between mb-4 gap-3">
             <h3 className="text-lg font-bold text-foreground">Étapes du voyage</h3>
 
-            {/* Flèches */}
             <div className="flex items-center gap-2">
               <Button
                   type="button"
@@ -178,7 +244,6 @@ export function RideWidget() {
             {journeyStages.map((stage) => {
               const isSelected = selectedStage.id === stage.id
 
-              // Tolère les anciens champs si jamais tout n’est pas encore partout
               const startCity = (stage as any).startCity ?? stage.name?.split(" - ")?.[0] ?? ""
               const endCity = (stage as any).endCity ?? stage.name?.split(" - ")?.[1] ?? ""
               const dPlus = (stage as any).elevationGain ?? stage.elevation ?? 0
@@ -194,7 +259,7 @@ export function RideWidget() {
                       onClick={() => setSelectedStage(stage)}
                       className={[
                         "flex-shrink-0 snap-start rounded-xl border-2 transition-all hover:scale-[1.02] text-left",
-                        "w-72 p-5", // ✅ vignette plus grande
+                        "w-72 p-5",
                         isSelected
                             ? "bg-primary text-primary-foreground border-primary shadow-lg"
                             : "bg-card border-border hover:border-primary/50",
@@ -207,7 +272,6 @@ export function RideWidget() {
                         </Badge>
                       </div>
 
-                      {/* Villes */}
                       <div>
                         <div className="text-sm font-bold leading-snug">
                           {startCity} → {endCity}
@@ -215,7 +279,6 @@ export function RideWidget() {
                         <div className="text-xs opacity-80">{stage.country}</div>
                       </div>
 
-                      {/* Infos clés */}
                       <div className="grid grid-cols-2 gap-2 text-xs">
                         <div className="rounded-md border border-border/60 p-2">
                           <div className="opacity-70">Distance</div>
@@ -238,7 +301,6 @@ export function RideWidget() {
                         </div>
                       </div>
 
-                      {/* (Optionnel) petit tag ferry */}
                       {(stage as any).ferry ? (
                           <Badge variant={isSelected ? "secondary" : "outline"} className="text-xs w-fit">
                             Ferry
@@ -251,8 +313,7 @@ export function RideWidget() {
           </div>
         </Card>
 
-
-        {/* uMap */}
+        {/* Map GPX (Leaflet) */}
         <Card className="p-6 border-2 border-primary/20">
           <div className="flex items-start justify-between mb-4">
             <div className="flex items-center gap-3">
@@ -261,27 +322,43 @@ export function RideWidget() {
               </div>
               <div>
                 <h3 className="font-bold text-foreground">Tracé GPX</h3>
+                <p className="text-sm text-muted-foreground">
+                  Carte interactive (zoom + déplacement). Le tracé se centre automatiquement.
+                </p>
               </div>
             </div>
-          </div>
-
-          <div className="bg-muted/30 rounded-lg overflow-hidden border-2 border-border">
-            <iframe
-                style={{ width: "100%", height: "700px", border: 0 }}
-                allowFullScreen
-                allow="geolocation"
-                src="//umap.openstreetmap.fr/en/map/tarifa-nordkapp_1339935?scaleControl=false&miniMap=false&scrollWheelZoom=false&zoomControl=true&editMode=disabled&moreControl=true&searchControl=null&tilelayersControl=null&embedControl=null&datalayersControl=true&onLoadPanel=none&captionBar=false&captionMenus=true"
-            />
 
             <a
-                href="//umap.openstreetmap.fr/en/map/tarifa-nordkapp_1339935?scaleControl=false&miniMap=false&scrollWheelZoom=true&zoomControl=true&editMode=disabled&moreControl=true&searchControl=null&tilelayersControl=null&embedControl=null&datalayersControl=true&onLoadPanel=none&captionBar=false&captionMenus=true"
+                href={gpxUrl}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="inline-flex items-center gap-2 text-sm text-primary hover:text-primary/80 transition-colors"
+                title="Ouvrir le fichier GPX"
             >
               <ExternalLink className="w-4 h-4" />
-              Voir en plein écran
-              </a>
+              GPX
+            </a>
+          </div>
+
+          <div className="bg-muted/30 rounded-lg overflow-hidden border-2 border-border">
+            {/* Important : height fix */}
+            <div style={{ width: "100%", height: "700px" }}>
+              {isClient ? (
+                  <MapContainer
+                      center={initialCenter}
+                      zoom={initialZoom}
+                      scrollWheelZoom={true}
+                      style={{ width: "100%", height: "100%" }}
+                  >
+                    <TileLayer
+                        attribution='&copy; OpenStreetMap contributors'
+                        url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+                    />
+
+                    <GPXLayer gpxUrl={gpxUrl} />
+                  </MapContainer>
+              ) : null}
+            </div>
           </div>
         </Card>
       </div>

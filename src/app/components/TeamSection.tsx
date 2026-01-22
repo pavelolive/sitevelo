@@ -19,7 +19,7 @@ const teamMembers = [
     name: 'Olivier',
     role: 'Cycliste passionné',
     bio: 'Après plusieurs voyages à vélo, l’envie de partir plus loin s’est imposée. Cette aventure est l’occasion de découvrir de nouveaux paysages, de prendre le temps du voyage et de privilégier une manière de se déplacer la plus respectueuse possible.',
-    image: 'https://lh3.googleusercontent.com/pw/AP1GczNoePBW4vtotEbijWPu_-Et7T4W44zgzU-njKlMey6vvjgkionfUMOkI3vv3S6nPOgO2zJxUSvav71teqc43u1ojbUzYf_OMQBYSjToLXqZolVv2s5_Mrb0yn8cBU1RdBgJ_LGvlvM0QY3GggEDnGgcpg=w735-h1307-s-no?authuser=0',
+    image: '/olivier.jpg',
     badges: ['Cycliste', 'Caméraman'],
   },
 ];

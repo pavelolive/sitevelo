@@ -59,10 +59,11 @@ export function HeroSection({ onDiscoverRoute, onShowPhotoGallery, onShowLiveTra
               <Button
                   onClick={onDiscoverRoute}
                   size="lg"
-                  className="bg-primary hover:bg-primary/90 text-primary-foreground shadow-lg group w-full sm:w-auto"
+                  variant="outline"
+                  className="shadow-lg group w-full sm:w-auto bg-transparent"
               >
                 Découvrir le tracé
-                <ArrowRight className="w-5 h-5 ml-2 group-hover:translate-x-1 transition-transform" />
+                <ArrowRight className="w-5 h-5 ml-2 group-hover:scale-110 transition-transform" />
               </Button>
 
               {onShowLiveTracking && (
