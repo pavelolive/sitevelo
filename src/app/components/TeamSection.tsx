@@ -4,26 +4,23 @@ import { Badge } from './ui/badge';
 
 const teamMembers = [
   {
-    name: 'Félix (aka Féfé)',
-    role: 'Cycliste passionné',
-    bio: 'Après plusieurs années à rêver de cette traversée, l’envie de ralentir et de se reconnecter à l’essentiel s’est imposée. Entre passion pour le vélo, amour des grands espaces et engagement pour l’environnement, ce voyage devient une manière de lier aventure, nature et contemplation des paysages qui inspirent tant.',
-    image: 'https://lh3.googleusercontent.com/pw/AP1GczPHibfv9ssxzYcmtkZ2CvHhLOCKwQhAhmu_ylJazwLbZhaF5sGqOx0sm1AijmUJTxHlYF2_CPA-Y8AYRHCBF5MjyD3eBZtH8aBVdyFqKh5224QwumZNnkfn7CkrLo9l98FpXYk7LmorMhdjVe1jD5H1nw=w527-h937-s-no?authuser=0',
-    badges: ['Explorateur', 'Aventurier'],
-    stats: {
-      experience: '10 ans',
-      trips: '15+',
-    },
+    name: 'La team 🚴🏻',
+    role: 'Aussi appelés les Gravel Packers',
+    bio: "Tous les deux piqués par le voyage à vélo après notre première aventure en bikepacking reliant Paris à Londres. S'en sont suivis trois autres voyages en commun à notre actif dont le dernier en 2025 : Paris ➡️ Amsterdam. ",
+    image: '/photo_fefe_oliv.jpeg',
   },
   {
-    name: 'Olivier Quintard',
+    name: 'Félix (aka Féfé)',
+    role: 'Le photographe de la bande 📸',
+    bio: "Ce voyage est pour moi l'occasion de marquer une transition vers une nouvelle vie qui m'attend à mon retour : photographe professionnel, accompagnateur en montagne, moniteur de canyoning, un peu de tout ça ? Qui sait, peut-être que ce voyage me mettra les idées plus au clair 🧐",
+    image: '/photo_felix.jpeg',
+  },
+  {
+    name: 'Olivier',
     role: 'Cycliste passionné',
     bio: 'Après plusieurs voyages à vélo, l’envie de partir plus loin s’est imposée. Cette aventure est l’occasion de découvrir de nouveaux paysages, de prendre le temps du voyage et de privilégier une manière de se déplacer la plus respectueuse possible.',
     image: 'https://lh3.googleusercontent.com/pw/AP1GczNoePBW4vtotEbijWPu_-Et7T4W44zgzU-njKlMey6vvjgkionfUMOkI3vv3S6nPOgO2zJxUSvav71teqc43u1ojbUzYf_OMQBYSjToLXqZolVv2s5_Mrb0yn8cBU1RdBgJ_LGvlvM0QY3GggEDnGgcpg=w735-h1307-s-no?authuser=0',
     badges: ['Cycliste', 'Caméraman'],
-    stats: {
-      experience: '33 ans',
-      trips: '4',
-    },
   },
 ];
 
@@ -40,12 +37,9 @@ export function TeamSection() {
           <h2 className="text-3xl md:text-4xl font-bold text-foreground">
             Qui sommes-nous ?
           </h2>
-          <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-            Deux passionnés d'aventure et de grands espaces unis par une même soif de découverte
-          </p>
         </div>
         
-        <div className="grid md:grid-cols-2 gap-8">
+        <div className="grid md:grid-cols-3 gap-8">
           {teamMembers.map((member, index) => (
             <Card 
               key={member.name} 
@@ -67,28 +61,8 @@ export function TeamSection() {
                 <img
                     src={member.image}
                     alt={member.name}
-                    className="relative z-10 w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
-                    style={{
-                      filter: "contrast(0.85) saturate(0.8) brightness(1.05) sepia(0.15)",
-                    }}
+                    className="relative z-10 w-full h-full object-cover"
                 />
-
-                {/* Badges */}
-                <div className="absolute top-4 right-4 z-20 flex flex-wrap gap-2 justify-end">
-                  {member.badges.map((badge) => (
-                      <Badge
-                          key={badge}
-                          className="bg-socials text-primary-foreground backdrop-blur-sm shadow-lg border border-white/20"
-                      >
-                        {badge}
-                      </Badge>
-                  ))}
-                </div>
-
-                {/* Stats */}
-                <div className="absolute bottom-4 left-4 right-4 z-20 flex gap-2">
-                  ...
-                </div>
               </div>
 
 
