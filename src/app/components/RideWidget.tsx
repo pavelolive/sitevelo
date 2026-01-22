@@ -322,21 +322,17 @@ export function RideWidget() {
               </div>
               <div>
                 <h3 className="font-bold text-foreground">Tracé GPX</h3>
-                <p className="text-sm text-muted-foreground">
-                  Carte interactive (zoom + déplacement). Le tracé se centre automatiquement.
-                </p>
               </div>
             </div>
 
             <a
                 href={gpxUrl}
-                target="_blank"
-                rel="noopener noreferrer"
+                download
                 className="inline-flex items-center gap-2 text-sm text-primary hover:text-primary/80 transition-colors"
-                title="Ouvrir le fichier GPX"
+                title="Télécharger le fichier GPX"
             >
               <ExternalLink className="w-4 h-4" />
-              GPX
+              Télécharger GPX
             </a>
           </div>
 

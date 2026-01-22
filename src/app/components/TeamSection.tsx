@@ -17,7 +17,7 @@ const teamMembers = [
   },
   {
     name: 'Olivier',
-    role: 'Cycliste passionné',
+    role: 'Le mécano 🔧',
     bio: 'Après plusieurs voyages à vélo, l’envie de partir plus loin s’est imposée. Cette aventure est l’occasion de découvrir de nouveaux paysages, de prendre le temps du voyage et de privilégier une manière de se déplacer la plus respectueuse possible.',
     image: '/olivier.jpg',
     badges: ['Cycliste', 'Caméraman'],
