@@ -20,12 +20,6 @@ export function HeroSection({ onDiscoverRoute, onShowPhotoGallery, onShowLiveTra
         <div className="relative z-10 max-w-7xl mx-auto grid md:grid-cols-2 gap-12 items-center">
           {/* Contenu textuel */}
           <div className="space-y-6 pt-12 md:pt-16 text-center md:text-left">
-            {/* Badge adventure */}
-            <div className="inline-flex items-center gap-2 bg-accent/20 text-accent-foreground px-4 py-2 rounded-full border border-accent/30">
-              <Compass className="w-4 h-4" />
-              <span className="text-sm">Aventure Épique</span>
-            </div>
-
             <h1 className="text-4xl md:text-6xl lg:text-7xl font-bold text-foreground leading-tight">
               De Tarifa au Cap Nord
             </h1>

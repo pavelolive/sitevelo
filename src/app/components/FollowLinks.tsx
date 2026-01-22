@@ -42,9 +42,6 @@ export function FollowLinks() {
             <h2 className="text-3xl md:text-4xl font-bold text-foreground">
               Suivez l'aventure
             </h2>
-            <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-              Restez connectés et vivez notre périple à travers nos différentes plateformes
-            </p>
           </div>
 
           {/* Social links */}
