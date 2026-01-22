@@ -27,12 +27,7 @@ export function TeamSection() {
   return (
     <section className="py-20 px-4 bg-primary-foreground">
       <div className="max-w-6xl mx-auto">
-        <div className="text-center mb-12 space-y-4">
-          <div className="inline-flex items-center gap-2 bg-accent/20 text-accent-foreground px-4 py-2 rounded-full border border-accent/30">
-            <Bike className="w-4 h-4" />
-            <span className="text-sm">Les Cyclistes</span>
-          </div>
-          
+        <div className="text-center mb-12 space-y-4">          
           <h2 className="text-3xl md:text-4xl font-bold text-foreground">
             Qui sommes-nous ?
           </h2>
