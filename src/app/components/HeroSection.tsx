@@ -12,21 +12,39 @@ interface HeroSectionProps {
 export function HeroSection({ onDiscoverRoute, onShowPhotoGallery, onShowLiveTracking }: HeroSectionProps) {
   return (
       <section className="relative min-h-[50vh] flex items-center justify-center overflow-hidden px-4 pb-12 md:pb-16 bg-primary-foreground from-background via-muted/30 to-accent/10">
+        {/* Map en arrière-plan uniquement en mobile */}
+        <img
+            src="/map-trace.svg"
+            alt=""
+            aria-hidden="true"
+            className="
+    md:hidden
+    absolute top-0 left-0 w-full h-[50%] object-cover object-[0%_center] opacity-50
+    pointer-events-none
+  "
+        />
+
+        {/* Map à droite uniquement en desktop (comme actuellement) */}
         <img
             src="/map-trace.svg"
             alt="Image d'accueil"
-            className="hidden md:block absolute top-0 right-[-100px] h-full object-cove"
+            className="
+    hidden md:block
+    absolute top-0 right-0 h-full
+    object-cover
+    pointer-events-none
+  "
         />
         <div className="relative z-10 max-w-7xl mx-auto grid md:grid-cols-2 gap-12 items-center">
           {/* Contenu textuel */}
           <div className="space-y-6 pt-12 md:pt-16 text-center md:text-left">
             <h1 className="text-4xl md:text-6xl lg:text-7xl font-bold text-foreground leading-tight">
-              The Edges of Europe project 
+              The Edges of Europe project
             </h1>
 
             <p className="text-lg md:text-xl text-muted-foreground max-w-xl">
-              6 mois pour traverser l’Europe continentale à vélo depuis Tarifa en Espagne, son point le plus au sud, 
-              jusqu’à son point le plus au nord en Norvège, Nordkapp. 
+              6 mois pour traverser l’Europe continentale à vélo depuis Tarifa en Espagne, son point le plus au sud,
+              jusqu’à son point le plus au nord en Norvège, Nordkapp.
               Une aventure de plus de 10 000km à travers ses plus belles routes et chemins gravel.
             </p>
 
