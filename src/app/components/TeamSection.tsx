@@ -4,10 +4,10 @@ import { Badge } from './ui/badge';
 
 const teamMembers = [
   {
-    name: 'Félix',
+    name: 'Félix (aka Féfé)',
     role: 'Cycliste passionné',
     bio: 'Après plusieurs années à rêver de cette traversée, l’envie de ralentir et de se reconnecter à l’essentiel s’est imposée. Entre passion pour le vélo, amour des grands espaces et engagement pour l’environnement, ce voyage devient une manière de lier aventure, nature et contemplation des paysages qui inspirent tant.',
-    image: 'https://images.unsplash.com/photo-1635702961362-bbc21a0f81a6?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxtYWxlJTIwY3ljbGlzdCUyMHBvcnRyYWl0JTIwb3V0ZG9vcnxlbnwxfHx8fDE3NjcxMDU4Mzl8MA&ixlib=rb-4.1.0&q=80&w=1080&utm_source=figma&utm_medium=referral',
+    image: 'https://lh3.googleusercontent.com/pw/AP1GczPHibfv9ssxzYcmtkZ2CvHhLOCKwQhAhmu_ylJazwLbZhaF5sGqOx0sm1AijmUJTxHlYF2_CPA-Y8AYRHCBF5MjyD3eBZtH8aBVdyFqKh5224QwumZNnkfn7CkrLo9l98FpXYk7LmorMhdjVe1jD5H1nw=w527-h937-s-no?authuser=0',
     badges: ['Explorateur', 'Aventurier'],
     stats: {
       experience: '10 ans',
