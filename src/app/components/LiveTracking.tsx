@@ -136,14 +136,28 @@ export function LiveTracking({ onBack }: LiveTrackingProps) {
         })();
     }, []);
 
-    // Mock live data
-    const mockLiveData = {
+    // Dynamically set totalStages based on journeyStages length
+    const totalStages = journeyStages.length;
+
+    // Define start and end dates for the journey
+    const startDate = new Date("2026-04-05"); // Example start date
+    const endDate = new Date("2026-09-05"); // Example end date
+
+    // Calculate daysElapsed and percentage dynamically
+    const today = new Date();
+    const totalDays = Math.ceil((endDate.getTime() - startDate.getTime()) / (1000 * 60 * 60 * 24));
+    // Ensure daysElapsed does not go negative if the journey hasn't started yet
+    const daysElapsed = Math.max(0, Math.ceil((today.getTime() - startDate.getTime()) / (1000 * 60 * 60 * 24)));
+    const percentage = Math.min(100, Math.max(0, Math.round((daysElapsed / totalDays) * 100)));
+
+    // Update liveData to use adjusted daysElapsed and percentage
+    const liveData = {
         progress: {
-            percentage: 28,
-            daysElapsed: 42,
-            daysRemaining: 108,
-            stagesCompleted: 6,
-            totalStages: 16,
+            percentage: percentage, // Use adjusted percentage
+            daysElapsed: daysElapsed, // Use adjusted daysElapsed
+            daysRemaining: totalDays - daysElapsed,
+            stagesCompleted: 0,
+            totalStages: totalStages,
         },
     }
 
@@ -224,12 +238,12 @@ export function LiveTracking({ onBack }: LiveTrackingProps) {
                         <div>
                             <div className="flex items-center justify-between mb-2">
                                 <span className="text-sm text-muted-foreground">Progression totale</span>
-                                <span className="font-bold text-primary">{mockLiveData.progress.percentage}%</span>
+                                <span className="font-bold text-primary">{liveData.progress.percentage}%</span>
                             </div>
                             <div className="w-full bg-muted rounded-full h-3 overflow-hidden">
                                 <div
                                     className="bg-gradient-to-r from-primary to-primary/70 h-full rounded-full transition-all"
-                                    style={{ width: `${mockLiveData.progress.percentage}%` }}
+                                    style={{ width: `${liveData.progress.percentage}%` }}
                                 />
                             </div>
                         </div>
@@ -238,7 +252,7 @@ export function LiveTracking({ onBack }: LiveTrackingProps) {
                             <div>
                                 <div className="text-sm text-muted-foreground">Étapes complétées</div>
                                 <div className="text-xl font-bold text-foreground">
-                                    {mockLiveData.progress.stagesCompleted} / {mockLiveData.progress.totalStages}
+                                    {liveData.progress.stagesCompleted} / {liveData.progress.totalStages}
                                 </div>
                             </div>
 
@@ -259,32 +273,18 @@ export function LiveTracking({ onBack }: LiveTrackingProps) {
 
                             <div>
                                 <div className="text-sm text-muted-foreground">Jours écoulés</div>
-                                <div className="text-xl font-bold text-foreground">{mockLiveData.progress.daysElapsed}</div>
+                                <div className="text-xl font-bold text-foreground">{liveData.progress.daysElapsed}</div>
                             </div>
 
                             <div>
                                 <div className="text-sm text-muted-foreground">Jours restants</div>
-                                <div className="text-xl font-bold text-foreground">{mockLiveData.progress.daysRemaining}</div>
+                                <div className="text-xl font-bold text-foreground">{liveData.progress.daysRemaining}</div>
                             </div>
 
                             <div>
                                 <div className="text-sm text-muted-foreground">Temps total</div>
                                 <div className="text-xl font-bold text-foreground">{loading ? "…" : total?.activity ? formatDuration(total.activity.moving_time_s) : "—"}</div>
                             </div>
-                        </div>
-                    </div>
-                </Card>
-
-                {/* Note */}
-                <Card className="p-4 bg-blue-50 border-blue-200">
-                    <div className="flex gap-3">
-                        <Info className="w-5 h-5 text-blue-600 shrink-0 mt-0.5" />
-                        <div className="text-sm text-blue-800">
-                            <p className="font-medium mb-1">Mode simulation</p>
-                            <p className="text-blue-700">
-                                Ces données sont simulées à titre de démonstration. Configurez l'intégration API ou Widget pour afficher
-                                les vraies données GPS.
-                            </p>
                         </div>
                     </div>
                 </Card>
