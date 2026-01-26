@@ -177,7 +177,7 @@ export function LiveTracking({ onBack }: LiveTrackingProps) {
             <div className="max-w-7xl mx-auto px-4 py-4">
                     <div className="flex items-center gap-4 mb-4">
                         <div className="flex-1">
-                            <h1 className="text-2xl font-bold text-foreground">Suivie GPS en Direct</h1>
+                            <h1 className="text-2xl font-bold text-foreground">Suivi GPS en Direct</h1>
                         </div>
                         <div className="flex items-center gap-2 bg-green-500/10 px-3 py-1.5 rounded-full border border-green-500/20">
                             <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse" />

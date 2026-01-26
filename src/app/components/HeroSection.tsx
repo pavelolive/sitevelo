@@ -86,7 +86,7 @@ export function HeroSection({ onDiscoverRoute, onShowPhotoGallery, onShowLiveTra
                       variant="outline"
                       className="shadow-lg group w-full sm:w-auto bg-transparent"
                   >
-                    Suivie GPS en Direct
+                    Suivi GPS en Direct
                     <Radio className="w-5 h-5 ml-2 group-hover:scale-110 transition-transform" />
                   </Button>
               )}
