@@ -117,11 +117,6 @@ export function PhotoGallery({ onBack }: PhotoGalleryProps) {
                             {loading ? "Chargement…" : error ? "Erreur de chargement" : `${photos.length} photo(s)`}
                         </p>
                     </div>
-
-                    {/* petit bouton refresh (optionnel) */}
-                    <Button variant="outline" size="sm" onClick={fetchPhotos} disabled={loading}>
-                        Actualiser
-                    </Button>
                 </div>
             </div>
 
