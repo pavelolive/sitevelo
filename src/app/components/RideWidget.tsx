@@ -28,6 +28,8 @@ type LatestActivityResponse = {
   error?: string
 }
 
+type StageStatus = "completed" | "current" | "upcoming"
+
 /**
  * Composant interne: charge un GPX dans Leaflet et fit bounds.
  * Le plugin leaflet-gpx ajoute L.GPX.
@@ -38,40 +40,21 @@ function GPXLayer({ gpxUrl }: { gpxUrl: string }) {
   useEffect(() => {
     if (!map) return
 
-    // @ts-expect-error: leaflet-gpx injecte L.GPX (pas typé)
+    // Supprime tout ancien GPX
+    map.eachLayer((layer: any) => {
+      if (layer instanceof L.GPX) map.removeLayer(layer)
+    })
+
     const gpx = new L.GPX(gpxUrl, {
       async: true,
-
-      polyline_options: {
-        opacity: 0.9,
-        weight: 4,
-      },
-
-      // ✅ API leaflet-gpx (mpetazzoni)
-      markers: {
-        // start/end du track
-        startIcon: null,
-        endIcon: null,
-
-        // waypoints (si ton GPX en contient)
-        wptIcons: { "": null },
-        wptTypeIcons: { "": null },
-
-        // points nommés -> désactivés
-        pointMatchers: [],
-      },
-
-      // ✅ et si tu veux carrément ne pas parser les waypoints:
-      gpx_options: {
-        parseElements: ["track", "route"], // pas "waypoint"
-      },
+      polyline_options: { opacity: 0.9, weight: 4 },
+      markers: { startIcon: null, endIcon: null },
+      gpx_options: { parseElements: ["track", "route"] },
     })
 
     gpx.on("loaded", (e: any) => {
       const bounds = e.target.getBounds()
-      if (bounds && bounds.isValid()) {
-        map.fitBounds(bounds, { padding: [20, 20] })
-      }
+      if (bounds && bounds.isValid()) map.fitBounds(bounds, { padding: [20, 20] })
     })
 
     gpx.addTo(map)
@@ -85,7 +68,7 @@ function GPXLayer({ gpxUrl }: { gpxUrl: string }) {
 }
 
 export function RideWidget() {
-  const [selectedStage, setSelectedStage] = useState(journeyStages[0])
+  const [selectedStage, setSelectedStage] = useState<typeof journeyStages[0] | null>(null)
   const scrollContainerRef = useRef<HTMLDivElement>(null)
   const cardRefs = useRef<Record<number, HTMLButtonElement | null>>({})
 
@@ -114,7 +97,10 @@ export function RideWidget() {
     el.scrollBy({ left: dir === "left" ? -amount : amount, behavior: "smooth" })
   }
 
-  const centerStageCard = (stageId: number, behavior: ScrollBehavior = "smooth") => {
+  const centerStageCard = (
+    stageId: number,
+    behavior: ScrollBehavior = "smooth"
+  ) => {
     const container = scrollContainerRef.current
     const card = cardRefs.current[stageId]
     if (!container || !card) return
@@ -122,35 +108,81 @@ export function RideWidget() {
     const containerRect = container.getBoundingClientRect()
     const cardRect = card.getBoundingClientRect()
 
-    const cardCenter = cardRect.left - containerRect.left + cardRect.width / 2
-    const targetScrollLeft = container.scrollLeft + cardCenter - container.clientWidth / 2
+    // largeur carte + gap (gap-4 = 16px)
+    const cardWidth = cardRect.width
+    const gap = 16
 
-    container.scrollTo({ left: targetScrollLeft, behavior })
+    // on veut que la carte apparaisse en 2e position
+    const offsetFromLeft = cardWidth + gap
+
+    const cardLeftInContainer =
+      cardRect.left - containerRect.left + container.scrollLeft
+
+    const targetScrollLeft = cardLeftInContainer - offsetFromLeft
+
+    container.scrollTo({
+      left: Math.max(0, targetScrollLeft),
+      behavior,
+    })
   }
+
 
   const parseFRDate = (s: string) => {
     const [dd, mm, yyyy] = s.split("/").map(Number)
     return new Date(yyyy, (mm ?? 1) - 1, dd ?? 1, 12, 0, 0, 0)
   }
 
-  const findStageForDate = (d: Date) => {
-    const day = new Date(d.getFullYear(), d.getMonth(), d.getDate(), 12, 0, 0, 0)
+  const findStageForDate = (date: Date) => {
+    for (const stage of journeyStages) {
+      const status = getStageStatusByDate(stage, date)
+      if (status === "current") {
+        return { kind: "match" as const, stageId: stage.id }
+      }
+    }
 
-    const first = journeyStages[0]
-    const last = journeyStages[journeyStages.length - 1]
-    const firstStart = parseFRDate(first.estimatedStartDate)
-    const lastEnd = parseFRDate(last.estimatedEndDate)
+    const firstStage = journeyStages[0]
+    const lastStage = journeyStages[journeyStages.length - 1]
 
-    if (day < firstStart) return { kind: "before" as const }
-    if (day > lastEnd) return { kind: "after" as const }
+    const firstStart = parseFRDate(firstStage.estimatedStartDate)
+    const lastEnd = parseFRDate(lastStage.estimatedEndDate)
 
-    const match = journeyStages.find((s) => {
-      const start = parseFRDate(s.estimatedStartDate)
-      const end = parseFRDate(s.estimatedEndDate)
-      return day >= start && day <= end
-    })
+    if (date < firstStart) return { kind: "before" as const }
+    if (date > lastEnd) return { kind: "after" as const }
 
-    return match ? { kind: "match" as const, stageId: match.id } : { kind: "before" as const }
+    return { kind: "before" as const }
+  }
+
+  const getStageStatusByDate = (
+    stage: (typeof journeyStages)[number],
+    today: Date
+  ) : StageStatus => {
+    const day = new Date(
+      today.getFullYear(),
+      3, // today.getMonth(),
+      today.getDate(),
+      12,
+      0,
+      0,
+      0
+    )
+
+    const start = parseFRDate(stage.estimatedStartDate)
+    const end = parseFRDate(stage.estimatedEndDate)
+
+    if (day > end) return "completed"
+    if (day > start && day <= end) return "current"
+    return "upcoming"
+  }
+
+  const getStageEmoji = (status: "completed" | "current" | "upcoming") => {
+    switch (status) {
+      case "completed":
+        return "✅"
+      case "current":
+        return "⏳"
+      case "upcoming":
+        return "🔜"
+    }
   }
 
   useEffect(() => {
@@ -212,6 +244,23 @@ export function RideWidget() {
           <div className="flex items-center justify-between mb-4 gap-3">
             <h3 className="text-lg font-bold text-foreground">Étapes du voyage</h3>
 
+            <div className="flex flex-wrap items-center gap-3 text-xs">
+              <div className="flex items-center gap-1">
+                <span className="text-emerald-600">✅</span>
+                <span>Terminée</span>
+              </div>
+
+              <div className="flex items-center gap-1">
+                <span className="text-emerald-600">⏳</span>
+                <span>En cours</span>
+              </div>
+
+              <div className="flex items-center gap-1">
+                <span className="text-emerald-600">🔜</span>
+                <span>À venir</span>
+              </div>
+            </div>
+
             <div className="flex items-center gap-2">
               <Button
                   type="button"
@@ -242,8 +291,13 @@ export function RideWidget() {
               style={{ scrollbarWidth: "thin" }}
           >
             {journeyStages.map((stage) => {
-              const isSelected = selectedStage.id === stage.id
+              const status = getStageStatusByDate(stage, new Date())
+              const stageEmoji = getStageEmoji(status)
 
+              const isCompleted = status === "completed"
+              const isCurrent = status === "current"
+              const isSelected = selectedStage?.id === stage.id
+              
               const startCity = (stage as any).startCity ?? stage.name?.split(" - ")?.[0] ?? ""
               const endCity = (stage as any).endCity ?? stage.name?.split(" - ")?.[1] ?? ""
               const dPlus = (stage as any).elevationGain ?? stage.elevation ?? 0
@@ -256,19 +310,38 @@ export function RideWidget() {
                         cardRefs.current[stage.id] = node
                       }}
                       key={stage.id}
+                      onClick={() => { setSelectedStage(stage); centerStageCard(stage.id) }}
                       className={[
                         "flex-shrink-0 snap-start rounded-xl border-2 transition-all hover:scale-[1.02] text-left",
                         "w-72 p-5",
-                        isSelected
-                            ? "bg-primary text-primary-foreground border-primary shadow-lg"
-                            : "bg-card border-border hover:border-primary/50",
+                        isCompleted
+                          ? "bg-muted/40 border-border text-muted-foreground opacity-80"
+                          : isCurrent 
+                          ? "bg-primary text-primary-foreground border-primary shadow-lg"
+                          : "bg-card border-border hover:border-primary/50",
                       ].join(" ")}
                   >
                     <div className="space-y-3">
                       <div className="flex items-center justify-between">
-                        <Badge variant={isSelected ? "secondary" : "outline"} className="text-xs">
+                        <Badge
+                          variant={isCompleted ? "secondary" : isCurrent ? "secondary" : "outline"}
+                          className="text-xs"
+                        >
                           Étape {stage.id}
                         </Badge>
+
+                        <span
+                          className="text-lg"
+                          title={
+                            status === "completed"
+                              ? "Étape terminée"
+                              : status === "current"
+                              ? "Étape en cours"
+                              : "Étape à venir"
+                          }
+                        >
+                          {stageEmoji}
+                        </span>
                       </div>
 
                       <div>
@@ -301,7 +374,7 @@ export function RideWidget() {
                       </div>
 
                       {(stage as any).ferry ? (
-                          <Badge variant={isSelected ? "secondary" : "outline"} className="text-xs w-fit">
+                          <Badge variant={isCurrent ? "secondary" : "outline"} className="text-xs w-fit">
                             Ferry
                           </Badge>
                       ) : null}
@@ -323,16 +396,28 @@ export function RideWidget() {
                 <h3 className="font-bold text-foreground">Tracé GPX</h3>
               </div>
             </div>
+            
+            <div className="flex items-center gap-3">
+              <Button
+                type="button"
+                variant="outline"
+                size="sm"
+                disabled={!selectedStage}
+                onClick={() => setSelectedStage(null)}
+              >
+                Voir le tracé complet
+              </Button>
 
-            <a
-                href={gpxUrl}
-                download
-                className="inline-flex items-center gap-2 text-sm text-primary hover:text-primary/80 transition-colors"
-                title="Télécharger le fichier GPX"
-            >
-              <ExternalLink className="w-4 h-4" />
-              Télécharger GPX
-            </a>
+              <a
+                  href={gpxUrl}
+                  download
+                  className="inline-flex items-center gap-2 text-sm text-primary hover:text-primary/80 transition-colors"
+                  title="Télécharger le fichier GPX"
+              >
+                <ExternalLink className="w-4 h-4" />
+                Télécharger GPX
+              </a>
+            </div>
           </div>
 
           <div className="bg-muted/30 rounded-lg overflow-hidden border-2 border-border">
@@ -350,7 +435,7 @@ export function RideWidget() {
                         url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
                     />
 
-                    <GPXLayer gpxUrl={gpxUrl} />
+                    <GPXLayer gpxUrl={selectedStage?.gpxUrl || "/gpx/tarifa-nordkapp.gpx"} />
                   </MapContainer>
               ) : null}
             </div>

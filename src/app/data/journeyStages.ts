@@ -15,7 +15,7 @@ export interface JourneyStage {
 }
 
 export const journeyStages = [
-  { id: 1,  name: "Tarifa - Malaga", country: "Espagne", distance: 276, elevation: 3824, elevationGain: 3824, elevationLoss: 3823, terrain: "Route",  startCity: "Tarifa", endCity: "Malaga", ferry: false, estimatedStartDate: "05/04/2026", estimatedEndDate: "09/04/2026"},
+  { id: 1,  name: "Tarifa - Malaga", country: "Espagne", distance: 276, elevation: 3824, elevationGain: 3824, elevationLoss: 3823, terrain: "Route",  startCity: "Tarifa", endCity: "Malaga", ferry: false, estimatedStartDate: "05/04/2026", estimatedEndDate: "09/04/2026", gpxUrl: "/gpx/tarifa-malaga.gpx"},
   { id: 2,  name: "Malaga - Almeria", country: "Espagne", distance: 245, elevation: 2512, elevationGain: 2512, elevationLoss: 2290, terrain: "Route",  startCity: "Malaga", endCity: "Almeria", ferry: false, estimatedStartDate: "09/04/2026", estimatedEndDate: "12/04/2026"},
   { id: 3,  name: "Almeria - Alcaraz", country: "Espagne", distance: 346, elevation: 7632, elevationGain: 7632, elevationLoss: 6934, terrain: "Gravel", startCity: "Almeria", endCity: "Alcaraz", ferry: false, estimatedStartDate: "12/04/2026", estimatedEndDate: "17/04/2026"},
   { id: 4,  name: "Alcaraz - Albacete", country: "Espagne", distance: 146, elevation: 2359, elevationGain: 2359, elevationLoss: 2603, terrain: "Route",  startCity: "Alcaraz", endCity: "Albacete", ferry: false, estimatedStartDate: "17/04/2026", estimatedEndDate: "19/04/2026"},
