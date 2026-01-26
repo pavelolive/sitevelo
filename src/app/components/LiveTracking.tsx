@@ -138,6 +138,10 @@ export function LiveTracking({ onBack }: LiveTrackingProps) {
 
     // Dynamically set totalStages based on journeyStages length
     const totalStages = journeyStages.length;
+    const totalDistanceKm = journeyStages.reduce(
+        (sum, stage) => sum + stage.distance,
+        0
+    );
 
     // Define start and end dates for the journey
     const startDate = new Date("2026-04-05"); // Example start date
@@ -148,12 +152,19 @@ export function LiveTracking({ onBack }: LiveTrackingProps) {
     const totalDays = Math.ceil((endDate.getTime() - startDate.getTime()) / (1000 * 60 * 60 * 24));
     // Ensure daysElapsed does not go negative if the journey hasn't started yet
     const daysElapsed = Math.max(0, Math.ceil((today.getTime() - startDate.getTime()) / (1000 * 60 * 60 * 24)));
-    const percentage = Math.min(100, Math.max(0, Math.round((daysElapsed / totalDays) * 100)));
+
+    const distanceDoneKm = total?.ok && total.activity
+                    ? total.activity.distance_km
+                    : 0;
+    const distanceDonepercentage = Math.min(
+        100,
+        Math.max(0, Math.round((distanceDoneKm / totalDistanceKm) * 100))
+    );
 
     // Update liveData to use adjusted daysElapsed and percentage
     const liveData = {
         progress: {
-            percentage: percentage, // Use adjusted percentage
+            percentage: distanceDonepercentage, // Use adjusted percentage
             daysElapsed: daysElapsed, // Use adjusted daysElapsed
             daysRemaining: totalDays - daysElapsed,
             stagesCompleted: 0,
