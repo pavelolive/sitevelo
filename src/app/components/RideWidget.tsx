@@ -256,7 +256,6 @@ export function RideWidget() {
                         cardRefs.current[stage.id] = node
                       }}
                       key={stage.id}
-                      onClick={() => setSelectedStage(stage)}
                       className={[
                         "flex-shrink-0 snap-start rounded-xl border-2 transition-all hover:scale-[1.02] text-left",
                         "w-72 p-5",
