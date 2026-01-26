@@ -158,7 +158,7 @@ export function RideWidget() {
   ) : StageStatus => {
     const day = new Date(
       today.getFullYear(),
-      3, // today.getMonth(),
+      today.getMonth(),
       today.getDate(),
       12,
       0,
