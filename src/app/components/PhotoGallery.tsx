@@ -138,26 +138,19 @@ export function PhotoGallery({ onBack }: PhotoGalleryProps) {
                         </div>
                     </div>
                 ) : (
-                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                    <div className="columns-1 sm:columns-2 lg:columns-3 gap-2">
                         {photos.map((photo, index) => (
                             <div
                                 key={photo.id}
                                 onClick={() => setSelectedPhotoIndex(index)}
-                                className="group relative overflow-hidden rounded-xl border-2 border-border bg-card shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-[1.02] cursor-pointer"
-                            >
-                                <div className="aspect-[4/3] overflow-hidden">
-                                    <img
-                                        src={photo.src || "/placeholder.svg"}
-                                        alt={photo.alt}
-                                        className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
-                                        loading="lazy"
-                                    />
-                                </div>
-                                <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/0 to-black/0 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                                    <div className="absolute bottom-0 left-0 right-0 p-4">
-                                        <p className="text-white font-semibold text-lg">{photo.location ?? "—"}</p>
-                                    </div>
-                                </div>
+                                className="group mb-2 break-inside-avoid cursor-pointer"
+                                >
+                                <img
+                                    src={photo.src || "/placeholder.svg"}
+                                    alt={photo.alt}
+                                    className="w-full h-auto transition-all duration-300 group-hover:brightness-50"
+                                    loading="lazy"
+                                />
                             </div>
                         ))}
                     </div>
@@ -209,7 +202,7 @@ export function PhotoGallery({ onBack }: PhotoGalleryProps) {
 
                     {/* Image container + swipe */}
                     <div
-                        className="relative max-w-[90vw] max-h-[90vh] flex items-center justify-center"
+                        className="relative flex flex-col items-center justify-center"
                         onClick={(e) => e.stopPropagation()}
                         onTouchStart={onTouchStart}
                         onTouchMove={onTouchMove}
@@ -218,11 +211,12 @@ export function PhotoGallery({ onBack }: PhotoGalleryProps) {
                         <img
                             src={selectedPhoto.src || "/placeholder.svg"}
                             alt={selectedPhoto.alt}
-                            className="max-w-full max-h-[90vh] object-contain rounded-lg"
+                            className="max-w-full max-h-[90vh] object-contain"
                         />
-
-                        <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/80 to-transparent p-6 rounded-b-lg">
-                            <p className="text-white text-xl font-semibold">{selectedPhoto.location ?? "—"}</p>
+                        <div className="mt-4 text-center">
+                            <p className="text-white text-xl font-semibold">
+                                {selectedPhoto.location ?? "—"}
+                            </p>
                             <p className="text-white/80 text-sm mt-1">
                                 {selectedPhotoIndex + 1} / {photos.length}
                             </p>
