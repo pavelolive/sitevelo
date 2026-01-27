@@ -99,6 +99,37 @@ function formatDuration(seconds: number) {
     return h > 0 ? `${h}h ${m}min` : `${m}min`;
 }
 
+type StageStatus = "completed" | "current" | "upcoming";
+
+const toNoon = (d: Date) =>
+    new Date(d.getFullYear(), d.getMonth(), d.getDate(), 12, 0, 0, 0);
+
+const parseFRDate = (s: string) => {
+    const [dd, mm, yyyy] = s.split("/").map(Number);
+    return new Date(yyyy, (mm ?? 1) - 1, dd ?? 1, 12, 0, 0, 0);
+};
+
+const getStageStatusByDate = (
+    stage: (typeof journeyStages)[number],
+    today: Date
+): StageStatus => {
+    const day = toNoon(today);
+    const start = parseFRDate(stage.estimatedStartDate);
+    const end = parseFRDate(stage.estimatedEndDate);
+
+    if (day > end) return "completed";
+    if (day > start && day <= end) return "current";
+    return "upcoming";
+};
+
+const diffDaysInclusive = (from: Date, to: Date) => {
+    // nombre de jours "inclusifs" entre from et to (from = jour 1)
+    const a = toNoon(from).getTime();
+    const b = toNoon(to).getTime();
+    const ms = 1000 * 60 * 60 * 24;
+    return Math.floor((b - a) / ms) + 1;
+};
+
 export function LiveTracking({ onBack }: LiveTrackingProps) {
     const [selectedStage, setSelectedStage] = useState(journeyStages[5]) // Default to Paris
     const scrollContainerRef = useRef<HTMLDivElement>(null)
@@ -143,32 +174,43 @@ export function LiveTracking({ onBack }: LiveTrackingProps) {
         0
     );
 
-    // Define start and end dates for the journey
-    const startDate = new Date("2026-04-05"); // Example start date
-    const endDate = new Date("2026-09-05"); // Example end date
-
-    // Calculate daysElapsed and percentage dynamically
     const today = new Date();
-    const totalDays = Math.ceil((endDate.getTime() - startDate.getTime()) / (1000 * 60 * 60 * 24));
-    // Ensure daysElapsed does not go negative if the journey hasn't started yet
-    const daysElapsed = Math.max(0, Math.ceil((today.getTime() - startDate.getTime()) / (1000 * 60 * 60 * 24)));
+    //const today = new Date(2026, 10, 10, 15, 0, 0, 0);
+
+// 🔥 Jour 1 = 5er avril 2026
+    const day1 = new Date(2026, 3, 5, 12, 0, 0, 0); // mois 3 = avril
+
+// borne "fin" = fin de la dernière étape
+    const lastStage = journeyStages[journeyStages.length - 1];
+    const journeyEnd = parseFRDate(lastStage.estimatedEndDate);
+
+    const totalDays = Math.max(0, diffDaysInclusive(day1, journeyEnd));
+
+// si on est avant le 1er avril => 0 jour écoulé, sinon inclusif (01/04 => 1)
+    const daysElapsed = today < day1 ? 0 : Math.max(0, Math.min(totalDays, diffDaysInclusive(day1, today)));
+
+    const stagesCompleted = journeyStages.filter(
+        (s) => getStageStatusByDate(s, today) === "completed"
+    ).length;
 
     const distanceDoneKm = total?.ok && total.activity
                     ? total.activity.distance_km
                     : 0;
-    const distanceDonepercentage = Math.min(
-        100,
-        Math.max(0, Math.round((distanceDoneKm / totalDistanceKm) * 100))
-    );
+
+    const timeDonePercentage =
+        totalDays === 0
+            ? 0
+            : Math.min(100, Math.max(0, Math.round((daysElapsed / totalDays) * 100)));
+
 
     // Update liveData to use adjusted daysElapsed and percentage
     const liveData = {
         progress: {
-            percentage: distanceDonepercentage, // Use adjusted percentage
-            daysElapsed: daysElapsed, // Use adjusted daysElapsed
-            daysRemaining: totalDays - daysElapsed,
-            stagesCompleted: 0,
-            totalStages: totalStages,
+            percentage: timeDonePercentage, // Use adjusted percentage
+            daysElapsed, // Use adjusted daysElapsed
+            daysRemaining: Math.max(0, totalDays - daysElapsed),
+            stagesCompleted,
+            totalStages,
         },
     }
 
