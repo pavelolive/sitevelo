@@ -7,7 +7,7 @@ const followLinks = [
     name: 'Polarsteps',
     description: 'Notre journal de bord',
     icon: MapPin,
-    url: 'https://www.polarsteps.com',
+    url: 'https://www.polarsteps.com/OlivierTraveler43/23879238-the-edges-of-europe-project',
     color: 'from-socials to-socials',
   },
   {

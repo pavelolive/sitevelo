@@ -22,7 +22,7 @@ export function Footer() {
             <ul className="space-y-2">
               <li>
                 <a
-                  href="https://www.polarsteps.com"
+                  href="https://www.polarsteps.com/OlivierTraveler43/23879238-the-edges-of-europe-project"
                   target="_blank"
                   rel="noopener noreferrer"
                   className="text-sm text-primary-foreground/80 hover:text-primary-foreground transition-colors"
