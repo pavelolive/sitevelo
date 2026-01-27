@@ -1,9 +1,9 @@
 "use client"
 
-import type React from "react"
+import { useEffect, useLayoutEffect, useMemo, useState } from "react"
+import type { TouchEvent as RTouchEvent } from "react"
 import { X, ChevronLeft, ChevronRight } from "lucide-react"
 import { Button } from "./ui/button"
-import { useEffect, useMemo, useState } from "react"
 
 interface PhotoGalleryProps {
     onBack: () => void
@@ -15,6 +15,131 @@ type GalleryItem = {
     alt: string
     location?: string
     createdAt: string
+}
+
+type GalleryItemWithRatio = GalleryItem & {
+    ratio: number // width / height
+}
+
+function usePhotoRatios(photos: GalleryItem[]) {
+    const [items, setItems] = useState<GalleryItemWithRatio[]>([])
+
+    useEffect(() => {
+        let cancelled = false
+
+        async function load() {
+            const results = await Promise.all(
+                photos.map(
+                    (p, idx) =>
+                        new Promise<GalleryItemWithRatio>((resolve) => {
+                            const fallback: GalleryItemWithRatio = { ...p, ratio: 1, originalIndex: idx }
+                            if (!p.src) return resolve(fallback)
+
+                            const img = new Image()
+                            img.onload = () => {
+                                const w = img.naturalWidth || 1
+                                const h = img.naturalHeight || 1
+                                resolve({ ...p, ratio: w / h, originalIndex: idx })
+                            }
+                            img.onerror = () => resolve(fallback)
+                            img.src = p.src
+                        })
+                )
+            )
+
+            if (!cancelled) setItems(results)
+        }
+
+        load()
+        return () => {
+            cancelled = true
+        }
+    }, [photos])
+
+    return items
+}
+
+type LaidOutItem = GalleryItemWithRatio & {
+    w: number
+    h: number
+}
+
+type GalleryItemWithRatio = GalleryItem & {
+    ratio: number
+    originalIndex: number
+}
+
+type LaidOutItem = GalleryItemWithRatio & {
+    w: number
+    h: number
+}
+
+function buildJustifiedRows(params: {
+    items: GalleryItemWithRatio[]
+    containerWidth: number
+    targetRowHeight: number
+    gap: number
+    minRowHeight?: number
+    maxRowHeight?: number
+    justifyLastRow?: boolean
+}) {
+    const {
+        items,
+        containerWidth,
+        targetRowHeight,
+        gap,
+        minRowHeight = Math.round(targetRowHeight * 0.75),
+        maxRowHeight = Math.round(targetRowHeight * 1.35),
+        justifyLastRow = false,
+    } = params
+
+    const rows: LaidOutItem[][] = []
+    let current: GalleryItemWithRatio[] = []
+    let sumRatios = 0
+
+    const flushRow = (row: GalleryItemWithRatio[], forceJustify: boolean, ratiosSum: number) => {
+        if (row.length === 0) return
+
+        const gapsTotal = gap * (row.length - 1)
+        const available = Math.max(1, containerWidth - gapsTotal)
+
+        let h = available / Math.max(0.0001, ratiosSum)
+
+        if (!forceJustify) {
+            // dernière ligne: garde la hauteur cible sans étirer
+            h = targetRowHeight
+        }
+
+        h = Math.max(minRowHeight, Math.min(maxRowHeight, h))
+
+        const laid: LaidOutItem[] = row.map((it) => ({
+            ...it,
+            h,
+            w: Math.round(it.ratio * h),
+        }))
+
+        rows.push(laid)
+    }
+
+    for (const it of items) {
+        current.push(it)
+        sumRatios += it.ratio
+
+        const gapsTotal = gap * (current.length - 1)
+        const expectedWidth = sumRatios * targetRowHeight + gapsTotal
+
+        if (expectedWidth >= containerWidth && current.length > 1) {
+            flushRow(current, true, sumRatios)
+            current = []
+            sumRatios = 0
+        }
+    }
+
+    if (current.length) {
+        flushRow(current, justifyLastRow, sumRatios)
+    }
+
+    return rows
 }
 
 export function PhotoGallery({ onBack }: PhotoGalleryProps) {
@@ -45,6 +170,46 @@ export function PhotoGallery({ onBack }: PhotoGalleryProps) {
     useEffect(() => {
         fetchPhotos()
     }, [])
+
+    const hasPhotos = photos.length > 0
+    const itemsWithRatio = usePhotoRatios(photos)
+
+    // ✅ au lieu de useRef, on garde le node dans un state
+    const [containerEl, setContainerEl] = useState<HTMLDivElement | null>(null)
+    const [containerWidth, setContainerWidth] = useState(0)
+
+    // ✅ callback ref : quand le div apparaît (après loading), on le reçoit ici
+    const containerRef = (node: HTMLDivElement | null) => {
+        setContainerEl(node)
+    }
+
+    // ✅ l’observer se branche quand containerEl existe
+    useLayoutEffect(() => {
+        if (!containerEl) return
+
+        const measure = () => {
+            const w = Math.floor(containerEl.getBoundingClientRect().width)
+            setContainerWidth(w)
+        }
+
+        measure()
+
+        const ro = new ResizeObserver(measure)
+        ro.observe(containerEl)
+
+        return () => ro.disconnect()
+    }, [containerEl])
+
+    const rows = useMemo(() => {
+        if (!containerWidth) return []
+        return buildJustifiedRows({
+            items: itemsWithRatio,
+            containerWidth,
+            targetRowHeight: 260,
+            gap: 8,
+            justifyLastRow: false,
+        })
+    }, [itemsWithRatio, containerWidth])
 
     // Si la liste change et que l'index sélectionné n'existe plus
     useEffect(() => {
@@ -80,12 +245,12 @@ export function PhotoGallery({ onBack }: PhotoGalleryProps) {
 
     const minSwipeDistance = 50
 
-    const onTouchStart = (e: React.TouchEvent) => {
+    const onTouchStart = (e: RTouchEvent<HTMLDivElement>) => {
         setTouchEnd(null)
         setTouchStart(e.targetTouches[0].clientX)
     }
 
-    const onTouchMove = (e: React.TouchEvent) => {
+    const onTouchMove = (e: RTouchEvent<HTMLDivElement>) => {
         setTouchEnd(e.targetTouches[0].clientX)
     }
 
@@ -98,9 +263,6 @@ export function PhotoGallery({ onBack }: PhotoGalleryProps) {
         if (isRightSwipe) goToPrevious()
     }
 
-    const hasPhotos = photos.length > 0
-
-    // Pour éviter les undefined quand pas de photos
     const selectedPhoto = useMemo(() => {
         if (selectedPhotoIndex === null) return null
         return photos[selectedPhotoIndex] ?? null
@@ -138,21 +300,30 @@ export function PhotoGallery({ onBack }: PhotoGalleryProps) {
                         </div>
                     </div>
                 ) : (
-                    <div className="columns-1 sm:columns-2 lg:columns-3 gap-2">
-                        {photos.map((photo, index) => (
-                            <div
-                                key={photo.id}
-                                onClick={() => setSelectedPhotoIndex(index)}
-                                className="group mb-2 break-inside-avoid cursor-pointer"
-                                >
-                                <img
-                                    src={photo.src || "/placeholder.svg"}
-                                    alt={photo.alt}
-                                    className="w-full h-auto transition-all duration-300 group-hover:brightness-50"
-                                    loading="lazy"
-                                />
-                            </div>
-                        ))}
+                    <div ref={containerRef} className="w-full">
+                        <div className="flex flex-col gap-2">
+                            {rows.map((row, rowIdx) => (
+                                <div key={rowIdx} className="flex gap-2">
+                                    {row.map((photo) => (
+                                        <button
+                                            key={photo.id}
+                                            type="button"
+                                            onClick={() => setSelectedPhotoIndex(photo.originalIndex)}
+                                            className="group relative overflow-hidden rounded-none shrink-0"
+                                            style={{ width: photo.w, height: photo.h }}
+                                            aria-label={photo.alt}
+                                        >
+                                            <img
+                                                src={photo.src || "/placeholder.svg"}
+                                                alt={photo.alt}
+                                                loading="lazy"
+                                                className="h-full w-full object-cover transition-all duration-300 group-hover:brightness-50"
+                                            />
+                                        </button>
+                                    ))}
+                                </div>
+                            ))}
+                        </div>
                     </div>
                 )}
             </div>
@@ -214,9 +385,7 @@ export function PhotoGallery({ onBack }: PhotoGalleryProps) {
                             className="max-w-full max-h-[90vh] object-contain"
                         />
                         <div className="mt-4 text-center">
-                            <p className="text-white text-xl font-semibold">
-                                {selectedPhoto.location ?? "—"}
-                            </p>
+                            <p className="text-white text-xl font-semibold">{selectedPhoto.location ?? "—"}</p>
                             <p className="text-white/80 text-sm mt-1">
                                 {selectedPhotoIndex + 1} / {photos.length}
                             </p>
