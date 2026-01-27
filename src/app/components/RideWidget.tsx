@@ -67,7 +67,52 @@ function GPXLayer({ gpxUrl }: { gpxUrl: string }) {
   return null
 }
 
+function StatusDot({ status }: { status: StageStatus }) {
+  const base =
+      "inline-flex items-center justify-center w-6 h-6 rounded-full border text-[11px] font-bold"
+
+  if (status === "completed") {
+    return (
+        <span
+            className={`${base} bg-muted text-muted-foreground border-border`}
+            aria-label="Étape terminée"
+            title="Étape terminée"
+        >
+        ✓
+      </span>
+    )
+  }
+
+  if (status === "current") {
+    return (
+        <span
+            className="relative inline-flex items-center justify-center w-6 h-6 rounded-full"
+            aria-label="Étape en cours"
+            title="Étape en cours"
+        >
+        <span className="absolute inline-flex h-full w-full rounded-full bg-primary/25 animate-pulse" />
+        <span className="relative inline-flex items-center justify-center w-6 h-6 rounded-full border-2 border-primary bg-background" />
+      </span>
+    )
+  }
+
+  // upcoming
+  return (
+      <span
+          className={`${base} bg-background text-muted-foreground border-border`}
+          aria-label="Étape à venir"
+          title="Étape à venir"
+      />
+  )
+}
+
+
 export function RideWidget() {
+
+  const DEBUG_DATE = new Date("2026-05-27T12:00:00")
+  //const today = DEBUG_DATE
+  const today = new Date()
+
   const [selectedStage, setSelectedStage] = useState<typeof journeyStages[0] | null>(null)
   const scrollContainerRef = useRef<HTMLDivElement>(null)
   const cardRefs = useRef<Record<number, HTMLButtonElement | null>>({})
@@ -174,22 +219,11 @@ export function RideWidget() {
     return "upcoming"
   }
 
-  const getStageEmoji = (status: "completed" | "current" | "upcoming") => {
-    switch (status) {
-      case "completed":
-        return "✅"
-      case "current":
-        return "⏳"
-      case "upcoming":
-        return "🔜"
-    }
-  }
-
   useEffect(() => {
     const el = scrollContainerRef.current
     if (!el) return
 
-    const res = findStageForDate(new Date())
+    const res = findStageForDate(today)
 
     requestAnimationFrame(() => {
       if (res.kind === "match") {
@@ -244,23 +278,6 @@ export function RideWidget() {
           <div className="flex items-center justify-between mb-4 gap-3">
             <h3 className="text-lg font-bold text-foreground">Étapes du voyage</h3>
 
-            <div className="flex flex-wrap items-center gap-3 text-xs">
-              <div className="flex items-center gap-1">
-                <span className="text-emerald-600">✅</span>
-                <span>Terminée</span>
-              </div>
-
-              <div className="flex items-center gap-1">
-                <span className="text-emerald-600">⏳</span>
-                <span>En cours</span>
-              </div>
-
-              <div className="flex items-center gap-1">
-                <span className="text-emerald-600">🔜</span>
-                <span>À venir</span>
-              </div>
-            </div>
-
             <div className="flex items-center gap-2">
               <Button
                   type="button"
@@ -291,8 +308,7 @@ export function RideWidget() {
               style={{ scrollbarWidth: "thin" }}
           >
             {journeyStages.map((stage) => {
-              const status = getStageStatusByDate(stage, new Date())
-              const stageEmoji = getStageEmoji(status)
+              const status = getStageStatusByDate(stage, today)
 
               const isCompleted = status === "completed"
               const isCurrent = status === "current"
@@ -330,18 +346,6 @@ export function RideWidget() {
                           Étape {stage.id}
                         </Badge>
 
-                        <span
-                          className="text-lg"
-                          title={
-                            status === "completed"
-                              ? "Étape terminée"
-                              : status === "current"
-                              ? "Étape en cours"
-                              : "Étape à venir"
-                          }
-                        >
-                          {stageEmoji}
-                        </span>
                       </div>
 
                       <div>
