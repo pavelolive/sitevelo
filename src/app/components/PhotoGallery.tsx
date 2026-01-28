@@ -17,10 +17,6 @@ type GalleryItem = {
     createdAt: string
 }
 
-type GalleryItemWithRatio = GalleryItem & {
-    ratio: number // width / height
-}
-
 function usePhotoRatios(photos: GalleryItem[]) {
     const [items, setItems] = useState<GalleryItemWithRatio[]>([])
 
@@ -57,11 +53,6 @@ function usePhotoRatios(photos: GalleryItem[]) {
     }, [photos])
 
     return items
-}
-
-type LaidOutItem = GalleryItemWithRatio & {
-    w: number
-    h: number
 }
 
 type GalleryItemWithRatio = GalleryItem & {
