@@ -152,3 +152,43 @@
     button { font-size: var(--text-base); font-weight: var(--font-weight-medium); line-height: 1.5; }
     input { font-size: var(--text-base); font-weight: var(--font-weight-normal); line-height: 1.5; }
 }
+
+
+.leaflet-legend {
+    background: rgba(255, 255, 255, 0.5);
+    padding: 10px 12px;
+    border-radius: 10px;
+    border: 1px solid rgba(0,0,0,0.12);
+    box-shadow: 0 8px 24px rgba(0,0,0,0.12);
+    font-size: 12px;
+    line-height: 1.2;
+}
+
+.leaflet-legend .legend-title {
+    font-weight: 700;
+    margin-bottom: 8px;
+}
+
+.leaflet-legend .legend-row {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-top: 6px;
+}
+
+.leaflet-legend .legend-line {
+    width: 28px;
+    height: 0;
+    border-top-width: 4px;
+    border-top-style: solid;
+    border-radius: 999px;
+    display: inline-block;
+}
+
+.leaflet-legend .legend-red {
+    border-top-color: #ef4444;
+}
+
+.leaflet-legend .legend-blue {
+    border-top-color: #3b82f6;
+}

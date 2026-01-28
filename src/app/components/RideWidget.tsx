@@ -34,6 +34,50 @@ type StageStatus = "completed" | "current" | "upcoming"
  * Composant interne: charge un GPX dans Leaflet et fit bounds.
  * Le plugin leaflet-gpx ajoute L.GPX.
  */
+
+function LegendControl() {
+  const map = useMap()
+
+  useEffect(() => {
+    if (!map) return
+
+    const legend = L.control({ position: "bottomright" })
+
+    legend.onAdd = () => {
+      const div = L.DomUtil.create("div", "leaflet-legend")
+
+      div.innerHTML = `
+        <div class="legend-title">Légende</div>
+        <div class="legend-row">
+          <span class="legend-line legend-red"></span>
+          <span>Gravel</span>
+        </div>
+        <div class="legend-row">
+          <span class="legend-line legend-blue"></span>
+          <span>Route / chemin</span>
+        </div>
+      `
+      return div
+    }
+
+    legend.addTo(map)
+
+    // évite que la légende capte le scroll/drag de la map
+    const el = (legend as any)._container as HTMLElement | undefined
+    if (el) {
+      L.DomEvent.disableClickPropagation(el)
+      L.DomEvent.disableScrollPropagation(el)
+    }
+
+    return () => {
+      legend.remove()
+    }
+  }, [map])
+
+  return null
+}
+
+
 function GPXLayer({ gpxUrl }: { gpxUrl: string }) {
   const map = useMap()
 
@@ -438,6 +482,8 @@ export function RideWidget() {
                         attribution='&copy; OpenStreetMap contributors'
                         url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
                     />
+
+                    <LegendControl />
 
                     <GPXLayer gpxUrl={selectedStage?.gpxUrl || "/gpx/tarifa-nordkapp.gpx"} />
                   </MapContainer>
