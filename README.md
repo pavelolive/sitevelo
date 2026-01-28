@@ -25,10 +25,13 @@
   Verifier l'etat
   `pm2 status` 
 
-  Commande d'action
-  `pm2 stop strava-ap`
-  `pm2 start strava-ap`
-  `pm2 restart strava-ap` 
+  Commande d'action :
+
+  `pm2 stop strava-api`
+
+  `pm2 start strava-api`
+  
+  `pm2 restart strava-api` 
   
 
 ## Reset les stats et gpx
