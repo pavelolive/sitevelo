@@ -34,7 +34,10 @@ export function HeaderNav({
                         onClick={onGoHome}
                         size="icon"
                         variant={activePage === "home" ? "default" : "outline"}
-                        className={activePage === "home" ? "shadow-sm" : "shrink-0"}
+                        className={activePage === "home"
+                            ? "shadow-sm"
+                            : "shrink-0 cursor-pointer"
+                        }
                         aria-label="Retour à l’accueil"
                     >
                         <Home className="w-4 h-4" />
