@@ -129,9 +129,6 @@ export function PhotoGallery({ onBack }: PhotoGalleryProps) {
                 ) : !hasPhotos ? (
                     <div className="rounded-xl border border-border bg-card p-6">
                         <div className="font-semibold text-foreground mb-2">Aucune photo pour le moment</div>
-                        <div className="text-sm text-muted-foreground">
-                            Uploade une photo depuis ta page admin et elle apparaîtra ici automatiquement.
-                        </div>
                     </div>
                 ) : (
                     <>
