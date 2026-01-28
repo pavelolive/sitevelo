@@ -23,7 +23,7 @@ export function HeaderNav({
                               onShowAdminUpload,
                           }: HeaderNavProps) {
     const baseBtn =
-        "shadow-sm whitespace-nowrap flex items-center gap-2"
+        "shadow-sm whitespace-nowrap flex items-center gap-2 cursor-pointer"
 
     return (
         <header className="sticky top-0 z-50 border-b border-border/60 bg-background/70 backdrop-blur supports-[backdrop-filter]:bg-background/60">

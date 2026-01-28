@@ -373,7 +373,7 @@ export function RideWidget() {
                       onClick={() => { setSelectedStage(stage); centerStageCard(stage.id) }}
                       className={[
                         "flex-shrink-0 snap-start rounded-xl border-2 transition-all hover:scale-[1.02] text-left",
-                        "w-72 p-5",
+                        "w-72 p-5 cursor-pointer",
                         isCompleted
                           ? "bg-muted/40 border-border text-muted-foreground opacity-80"
                           : isCurrent 

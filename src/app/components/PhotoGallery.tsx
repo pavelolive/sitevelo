@@ -300,7 +300,7 @@ export function PhotoGallery({ onBack }: PhotoGalleryProps) {
                                             key={photo.id}
                                             type="button"
                                             onClick={() => setSelectedPhotoIndex(photo.originalIndex)}
-                                            className="group relative overflow-hidden rounded-none shrink-0"
+                                            className="group relative overflow-hidden rounded-none shrink-0 cursor-pointer"
                                             style={{ width: photo.w, height: photo.h }}
                                             aria-label={photo.alt}
                                         >

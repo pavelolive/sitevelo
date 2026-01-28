@@ -73,7 +73,7 @@ export function HeroSection({ onDiscoverRoute, onShowPhotoGallery, onShowLiveTra
                   onClick={onDiscoverRoute}
                   size="lg"
                   variant="outline"
-                  className="shadow-lg group w-full sm:w-auto bg-transparent"
+                  className="shadow-lg group w-full sm:w-auto bg-transparent cursor-pointer"
               >
                 Découvrir le tracé
                 <ArrowRight className="w-5 h-5 ml-2 group-hover:scale-110 transition-transform" />
@@ -84,7 +84,7 @@ export function HeroSection({ onDiscoverRoute, onShowPhotoGallery, onShowLiveTra
                       onClick={onShowLiveTracking}
                       size="lg"
                       variant="outline"
-                      className="shadow-lg group w-full sm:w-auto bg-transparent"
+                      className="shadow-lg group w-full sm:w-auto bg-transparent cursor-pointer"
                   >
                     Suivi GPS en Direct
                     <Radio className="w-5 h-5 ml-2 group-hover:scale-110 transition-transform" />
@@ -96,7 +96,7 @@ export function HeroSection({ onDiscoverRoute, onShowPhotoGallery, onShowLiveTra
                       onClick={onShowPhotoGallery}
                       size="lg"
                       variant="outline"
-                      className="shadow-lg group w-full sm:w-auto bg-transparent"
+                      className="shadow-lg group w-full sm:w-auto bg-transparent cursor-pointer"
                   >
                     Galerie photos
                     <Camera className="w-5 h-5 ml-2 group-hover:scale-110 transition-transform" />
