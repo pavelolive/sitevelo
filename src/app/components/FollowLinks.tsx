@@ -1,12 +1,13 @@
 import { ExternalLink, MapPin } from 'lucide-react';
-import { SiStrava, SiInstagram } from 'react-icons/si'
+import {SiStrava, SiInstagram, SiPolars} from 'react-icons/si'
 import { Card } from './ui/card';
+import { PolarstepsIcon } from './PolarstepsIcon'
 
 const followLinks = [
   {
     name: 'Polarsteps',
     description: 'Notre journal de bord',
-    icon: MapPin,
+    icon: PolarstepsIcon,
     url: 'https://www.polarsteps.com/OlivierTraveler43/23879238-the-edges-of-europe-project',
     color: 'from-socials to-socials',
   },
