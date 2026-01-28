@@ -1,14 +1,33 @@
-import express from "express";
-import galleryRoutes from "./routes/galleryRoutes.mjs";
-import fs from "fs";
-import path from "path";
-import cron from "node-cron";
+import express from "express"
+import galleryRoutes from "./routes/galleryRoutes.mjs"
+import fs from "fs"
+import path from "path"
+import cron from "node-cron"
 
-const app = express();
+const app = express()
 
-app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
-app.use("/api/gallery", galleryRoutes);
+app.use(express.json())
+app.use(express.urlencoded({ extended: true }))
+
+/* ==============================
+   Galerie (statique + API)
+================================ */
+
+const GALLERY_DIR = "/mnt/media/photovelo"
+const IMAGES_DIR = path.join(GALLERY_DIR, "images")
+const THUMBS_DIR = path.join(GALLERY_DIR, "thumbs")
+
+app.use("/gallery/images", express.static(IMAGES_DIR, {
+    maxAge: "30d",
+    immutable: true,
+}))
+
+app.use("/gallery/thumbs", express.static(THUMBS_DIR, {
+    maxAge: "30d",
+    immutable: true,
+}))
+
+app.use("/api/gallery", galleryRoutes)
 
 const {
     STRAVA_CLIENT_ID,
