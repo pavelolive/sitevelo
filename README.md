@@ -19,6 +19,10 @@
 
   `rsync -av --delete dist/ youruser@ssh.qtrd.fr:/var/www/velo.qtrd.fr/` 
 
+  `rsync ./galleryRoutes.mjs  youruser@ssh.qtrd.fr:/opt/velo-strava-api/routes/`
+
+  `rsync ./server.mjs  youruser@ssh.qtrd.fr:/opt/velo-strava-api/`
+
   
 ## Lancer le Backend
 
