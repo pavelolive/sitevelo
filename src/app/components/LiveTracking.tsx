@@ -193,10 +193,6 @@ export function LiveTracking({ onBack }: LiveTrackingProps) {
         (s) => getStageStatusByDate(s, today) === "completed"
     ).length;
 
-    const distanceDoneKm = total?.ok && total.activity
-                    ? total.activity.distance_km
-                    : 0;
-
     const timeDonePercentage =
         totalDays === 0
             ? 0
