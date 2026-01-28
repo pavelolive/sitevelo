@@ -22,7 +22,20 @@
   
 ## Lancer le Backend
 
-  `cd /opt/velo-strava-api` 
+  Verifier l'etat
+  `pm2 status` 
 
-  `node server.mjs` 
+  Commande d'action
+  `pm2 stop strava-ap`
+  `pm2 start strava-ap`
+  `pm2 restart strava-ap` 
   
+
+## Reset les stats et gpx
+
+  `rm -rf cache/*`
+  `rm -rf gpx_files/*` 
+  
+## Forcer le refresh strava
+
+  `curl -X POST http://localhost:3001/api/strava/refresh` 
