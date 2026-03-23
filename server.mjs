@@ -1,3 +1,4 @@
+import "dotenv/config";
 import express from "express"
 import galleryRoutes from "./routes/galleryRoutes.mjs"
 import fs from "fs"
