@@ -151,7 +151,7 @@ async function getTodayActivities(accessToken) {
 }
 
 async function getActivitiesSinceBeginning(accessToken) {
-    const start = new Date(2026, 3, 5);
+    const start = new Date(2026, 3, 2);
     const end = new Date(2026, 8, 20);
 
     if (new Date() < start) return [];
