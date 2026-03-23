@@ -264,7 +264,7 @@ async function refreshAllStravaData() {
    Cron + boot
 ================================ */
 
-cron.schedule("5 0 * * *", refreshAllStravaData, { timezone: "Europe/Paris" });
+cron.schedule("5 23 * * *", refreshAllStravaData, { timezone: "Europe/Paris" });
 
 (async () => {
     if (!readJsonSafe(LATEST_JSON) || !readJsonSafe(TOTAL_JSON)) {
