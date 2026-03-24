@@ -1,7 +1,7 @@
 import { ExternalLink, MapPin } from 'lucide-react';
-import {SiStrava, SiInstagram, SiPolars} from 'react-icons/si'
+import { SiStrava, SiInstagram, SiPeertube } from 'react-icons/si';
 import { Card } from './ui/card';
-import { PolarstepsIcon } from './PolarstepsIcon'
+import { PolarstepsIcon } from './PolarstepsIcon';
 
 const followLinks = [
   {
@@ -32,12 +32,19 @@ const followLinks = [
     url: 'https://www.instagram.com/felix_larrouy/',
     color: 'from-socials to-socials',
   },
+  {
+    name: 'Peertube',
+    description: 'Quelques vidéos',
+    icon: SiPeertube,
+    url: 'https://peertube.qtrd.fr/',
+    color: 'from-socials to-socials',
+  },
 ];
 
 export function FollowLinks() {
   return (
       <section className="py-20 px-4 bg-muted">
-        <div className="max-w-6xl mx-auto">
+        <div className="max-w-7xl mx-auto">
           {/* Header */}
           <div className="text-center mb-12 space-y-4">
             <h2 className="text-3xl md:text-4xl font-bold text-foreground">
@@ -46,7 +53,7 @@ export function FollowLinks() {
           </div>
 
           {/* Social links */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6">
+          <div className="grid grid-cols-1 sm:grid-cols-5 md:gap-6 gap-4">
             {followLinks.map((link) => {
               const Icon = link.icon
               return (
